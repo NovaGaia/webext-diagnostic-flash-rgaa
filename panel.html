@@ -437,6 +437,194 @@
       opacity: 1;
     }
     
+    /* Analyse des contrastes */
+    .contrast-analysis {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .contrast-controls {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .control-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    
+    .control-label span:first-child {
+      color: #666;
+    }
+    
+    .control-select {
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      background: white;
+      cursor: pointer;
+    }
+    
+    .contrast-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .contrast-section {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .contrast-section-title {
+      margin: 0;
+      padding: 10px 15px;
+      background: #f5f5f5;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .contrast-table {
+      font-size: 12px;
+    }
+    
+    .contrast-table-header {
+      display: grid;
+      grid-template-columns: 120px 80px 1fr;
+      padding: 8px 15px;
+      background: #f9f9f9;
+      font-weight: 600;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .contrast-table-body {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .contrast-row {
+      display: grid;
+      grid-template-columns: 120px 80px 1fr;
+      padding: 8px 15px;
+      border-bottom: 1px solid #f0f0f0;
+      align-items: center;
+      transition: background-color 0.2s;
+    }
+    
+    .size-col {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .contrast-row:last-child {
+      border-bottom: none;
+    }
+    
+    .contrast-row:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .contrast-row.highlight-active {
+      background-color: #fff3cd;
+      border-left: 3px solid #f44336;
+    }
+    
+    .contrast-col {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .check-icon {
+      color: #4caf50;
+      font-weight: bold;
+    }
+    
+    .fail-icon {
+      color: #f44336;
+      font-weight: bold;
+    }
+    
+    .contrast-ratio {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    
+    .elements-col {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    
+    .element-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .element-size {
+      font-weight: 500;
+      color: #666;
+      min-width: 50px;
+    }
+    
+    .element-tags {
+      color: #333;
+    }
+    
+    .contrast-summary {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px solid #e0e0e0;
+    }
+    
+    .contrast-summary-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    
+    .contrast-summary-table {
+      display: grid;
+      grid-template-columns: 80px 100px 60px 60px;
+      gap: 10px;
+      font-size: 12px;
+    }
+    
+    .summary-row {
+      display: contents;
+    }
+    
+    .summary-row.header {
+      font-weight: 600;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 5px;
+    }
+    
+    .summary-row > div {
+      padding: 6px 0;
+    }
+    
     .empty-state {
       text-align: center;
       padding: 30px;
@@ -540,8 +728,15 @@
   <script src="utils/stats.js"></script>
   <script src="utils/ui.js"></script>
   
-  <!-- Visualisations -->
-  <script src="visualizations/keyboard.js"></script>
+  <!-- Visualisations Navigation -->
+  <script src="tests/navigation/keyboard-visualization.js"></script>
+  
+  <!-- Modules contrastes (dans l'ordre de dépendance) -->
+  <script src="tests/langage/contrasts/utils.js"></script>
+  <script src="tests/langage/contrasts/analyze.js"></script>
+  <script src="tests/langage/contrasts/display.js"></script>
+  <script src="tests/langage/contrasts/highlight.js"></script>
+  <script src="tests/langage/contrasts/observer.js"></script>
   
   <!-- Tests Navigation & utilisation -->
   <script src="tests/navigation/responsive-design.js"></script>

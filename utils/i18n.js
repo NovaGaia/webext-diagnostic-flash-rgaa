@@ -76,7 +76,10 @@ const translations = {
     // Test: Contrastes
     testContrastsName: 'Les contrastes sont suffisants',
     testContrastsDesc: 'Vérification du contraste entre le texte et l\'arrière-plan (minimum 4,5:1) et entre les éléments interactifs et l\'arrière-plan (minimum 3:1)',
-    testContrastsInfo: 'ℹ️ Utilisez l\'extension Contrast Checker pour vérifier les contrastes',
+    testContrastsInfo: 'ℹ️ Cliquez sur "Analyser les contrastes" pour analyser la page',
+    testContrastsAnalyze: 'Analyser les contrastes (beta)',
+    testContrastsAnalyzing: 'Analyse en cours...',
+    testContrastsReanalyze: 'Relancer l\'analyse',
     testContrastsNameForStats: 'Les contrastes sont suffisants',
     
     // Test: Animations
@@ -90,6 +93,10 @@ const translations = {
     testPageTitleDesc: 'Vérification que le titre de la page affiché dans l\'onglet du navigateur est unique et pertinent',
     testPageTitleInfo: 'ℹ️ Test à valider manuellement',
     testPageTitleNameForStats: 'Le titre de la page est unique et pertinent',
+    testPageTitleLabel: 'Title:',
+    testPageTitleH1Label: 'H1:',
+    testPageTitleNotFound: 'Aucun titre détecté',
+    testPageTitleH1NotFound: 'Aucun H1 détecté',
     
     // Test: Hiérarchie des titres
     testHeadingsHierarchyName: 'La hiérarchie des titres est complète et cohérente',
@@ -129,6 +136,7 @@ const translations = {
     errorDetection: 'Erreur lors de la détection',
     errorCleanup: 'Erreur lors du nettoyage',
     errorMessageExtraction: 'Erreur lors de la gestion du message d erreur',
+    errorContrastAnalysis: 'Erreur lors de l\'analyse des contrastes',
     
     // Titre du panneau
     panelTitle: 'Diagnostic Flash RGAA',
@@ -206,6 +214,15 @@ const translations = {
     testDownloadableFilesOpenFormat: ' ({openCount} in open format: {formats})',
     testDownloadableFilesClosedFormat: ' - {closedCount} in closed format: {formats}',
     
+    // Test: Contrastes
+    testContrastsName: 'Contrasts are sufficient',
+    testContrastsDesc: 'Verification of contrast between text and background (minimum 4.5:1) and between interactive elements and background (minimum 3:1)',
+    testContrastsInfo: 'ℹ️ Click on "Analyze contrasts" to analyze the page',
+    testContrastsAnalyze: 'Analyze contrasts (beta)',
+    testContrastsAnalyzing: 'Analysis in progress...',
+    testContrastsReanalyze: 'Re-run analysis',
+    testContrastsNameForStats: 'Contrasts are sufficient',
+    
     // Validation
     validationPassed: '✓ Passed',
     validationFailed: '✗ Failed',
@@ -226,6 +243,7 @@ const translations = {
     errorDetection: 'Error during detection',
     errorCleanup: 'Error during cleanup',
     errorMessageExtraction: 'Error during error message handling',
+    errorContrastAnalysis: 'Error during contrast analysis',
     
     // Titre du panneau
     panelTitle: 'RGAA Flash Diagnostic',
@@ -236,6 +254,16 @@ const translations = {
     warningPassedTestsNotFound: 'passedTests element not found',
     warningFailedTestsNotFound: 'failedTests element not found',
     warningInfoNotFound: 'Info element not found for test',
+    
+    // Test: Page title
+    testPageTitleName: 'The page title is unique and relevant',
+    testPageTitleDesc: 'Verification that the page title displayed in the browser tab is unique and relevant',
+    testPageTitleInfo: 'ℹ️ Test to be manually validated',
+    testPageTitleNameForStats: 'The page title is unique and relevant',
+    testPageTitleLabel: 'Title:',
+    testPageTitleH1Label: 'H1:',
+    testPageTitleNotFound: 'No title detected',
+    testPageTitleH1NotFound: 'No H1 detected',
     
     // Documentation
     docShowDocumentation: 'Show documentation',

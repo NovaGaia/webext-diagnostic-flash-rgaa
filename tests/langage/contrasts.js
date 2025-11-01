@@ -18,6 +18,7 @@ function testContrasts() {
       <div class="auto-check" id="test-${testId}-info">
         ${t('testContrastsInfo')}
       </div>
+      <button class="button-small" id="test-${testId}-analyze" style="margin-top: 10px;">${t('testContrastsAnalyze')}</button>
     </div>
     <div class="test-actions">
       <div class="test-validation">
@@ -42,6 +43,34 @@ function testContrasts() {
   
   // Initialiser le bloc de documentation
   initDocumentationBlocks();
+  
+  // Écouteur pour le bouton d'analyse
+  const analyzeBtn = document.getElementById(`test-${testId}-analyze`);
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', () => {
+      analyzeBtn.textContent = t('testContrastsAnalyzing');
+      analyzeBtn.disabled = true;
+      
+      analyzeContrasts('AA', (results) => {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = t('testContrastsAnalyze');
+        
+        if (results.error) {
+          const infoElement = document.getElementById(`test-${testId}-info`);
+          if (infoElement) {
+            // Convertir l'erreur en chaîne de manière sécurisée
+            const errorMessage = typeof results.error === 'string' 
+              ? results.error 
+              : (results.error?.value || results.error?.description || results.error?.message || String(results.error));
+            infoElement.textContent = '✗ ' + t('errorContrastAnalysis') + ': ' + errorMessage;
+            infoElement.className = 'auto-check failed';
+          }
+        } else {
+          displayContrastAnalysis(testId, results, 'AA');
+        }
+      });
+    });
+  }
   
   // Écouteurs pour les options de validation
   const validationInputs = document.querySelectorAll(`input[name="test-${testId}-validation"]`);
