@@ -99,16 +99,15 @@ function simulateTests() {
   testTwoNavigationMeans();
   testDownloadableFiles();
   
-  // Pour les autres catégories, afficher un message
-  ['langage', 'structuration'].forEach(categoryId => {
-    const content = document.getElementById(`category-${categoryId}`);
-    content.innerHTML = `
-      <div class="test-item">
-        <div class="test-name">${t('testsNotImplemented')}</div>
-        <div class="test-description">${t('testsNotImplementedDesc')}</div>
-      </div>
-    `;
-  });
+  // Tests de la catégorie langage
+  testContrasts();
+  testAnimations();
+  
+  // Tests de la catégorie structuration
+  testPageTitle();
+  testHeadingsHierarchy();
+  testFormFields();
+  testDownloadInfo();
   
   updateStats();
 }

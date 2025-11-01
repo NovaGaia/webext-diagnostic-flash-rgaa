@@ -73,6 +73,42 @@ const translations = {
     testDownloadableFilesClosedFormat: ' - {closedCount} en format fermé: {formats}',
     testDownloadableFilesNameForStats: 'Les fichiers bureautiques téléchargeables sur le site sont proposés dans un format ouvert et sont accessibles',
     
+    // Test: Contrastes
+    testContrastsName: 'Les contrastes sont suffisants',
+    testContrastsDesc: 'Vérification du contraste entre le texte et l\'arrière-plan (minimum 4,5:1) et entre les éléments interactifs et l\'arrière-plan (minimum 3:1)',
+    testContrastsInfo: 'ℹ️ Utilisez l\'extension Contrast Checker pour vérifier les contrastes',
+    testContrastsNameForStats: 'Les contrastes sont suffisants',
+    
+    // Test: Animations
+    testAnimationsName: 'Les animations, clignotements et sons sont contrôlables',
+    testAnimationsDesc: 'Vérification que les animations et sons peuvent être contrôlés par l\'utilisateur',
+    testAnimationsInfo: 'ℹ️ Test à valider manuellement',
+    testAnimationsNameForStats: 'Les animations, clignotements et sons sont contrôlables',
+    
+    // Test: Titre de page
+    testPageTitleName: 'Le titre de la page est unique et pertinent',
+    testPageTitleDesc: 'Vérification que le titre de la page affiché dans l\'onglet du navigateur est unique et pertinent',
+    testPageTitleInfo: 'ℹ️ Test à valider manuellement',
+    testPageTitleNameForStats: 'Le titre de la page est unique et pertinent',
+    
+    // Test: Hiérarchie des titres
+    testHeadingsHierarchyName: 'La hiérarchie des titres est complète et cohérente',
+    testHeadingsHierarchyDesc: 'Vérification qu\'il y a au moins un titre de niveau 1 et que l\'arbre des titres est logique',
+    testHeadingsHierarchyInfo: 'ℹ️ Utilisez l\'extension HeadingsMap pour vérifier la hiérarchie',
+    testHeadingsHierarchyNameForStats: 'La hiérarchie des titres est complète et cohérente',
+    
+    // Test: Champs de formulaire
+    testFormFieldsName: 'Chaque champ de formulaire est clairement associé à son intitulé. Les champs et les formats obligatoires sont indiqués',
+    testFormFieldsDesc: 'Vérification que les intitulés des champs sont correctement associés et que les champs obligatoires sont indiqués',
+    testFormFieldsInfo: 'ℹ️ Test à valider manuellement',
+    testFormFieldsNameForStats: 'Chaque champ de formulaire est clairement associé à son intitulé. Les champs et les formats obligatoires sont indiqués',
+    
+    // Test: Informations fichiers téléchargement
+    testDownloadInfoName: 'Les informations relatives aux fichiers proposés en téléchargement sont indiqués',
+    testDownloadInfoDesc: 'Vérification que le format, la taille, la langue et le nom des fichiers téléchargeables sont indiqués',
+    testDownloadInfoInfo: 'ℹ️ Test à valider manuellement',
+    testDownloadInfoNameForStats: 'Les informations relatives aux fichiers proposés en téléchargement sont indiqués',
+    
     // Validation
     validationPassed: '✓ Réussi',
     validationFailed: '✗ Échoué',

@@ -161,6 +161,116 @@ function getDocumentationContent(testId) {
   <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-13" target="_blank" rel="noopener" class="rgaa-badge">13.3<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
   <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-13" target="_blank" rel="noopener" class="rgaa-badge">13.4<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
 </div>`
+    },
+    'contrasts': {
+      howToCheck: `<p>Sur l'échantillon, vérifier à l'aide d'un outil de vérification de contraste</p>
+<ul>
+  <li>le contraste entre la couleur du texte et la couleur de l'arrière-plan. Sa valeur doit être d'au moins 4,5:1</li>
+  <li>le contraste entre la couleur des éléments d'interfaces interactifs (bouton, champ de formulaire, icône, ...) et la couleur de l'arrière-plan. Sa valeur doit être d'au moins 3:1</li>
+</ul>
+<p>Vous pouvez, par exemple, utiliser l'extension de navigateur Contrast Checker (symbolisée par une roue multicolore) :</p>
+<ul>
+  <li><a href="https://chrome.google.com/webstore/detail/contrast-checker/" target="_blank" rel="noopener" class="external-link">Extension pour Chrome<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+  <li><a href="https://addons.mozilla.org/fr/firefox/addon/contrast-checker/" target="_blank" rel="noopener" class="external-link">Extension pour Firefox<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+  <li><a href="https://microsoftedge.microsoft.com/addons/detail/contrast-checker/" target="_blank" rel="noopener" class="external-link">Extension pour Edge<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+</ul>`,
+      why: `<p>Afin de permettre une bonne lisibilité des contenus et de limiter la charge mentale lors de la consultation des pages, il est indispensable que le contraste entre les éléments du site et leur arrière-plan soit suffisant.</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-3" target="_blank" rel="noopener" class="rgaa-badge">3.3<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
+    },
+    'animations': {
+      howToCheck: `<p>Concernant les animations et contenus en mouvement, contrôler que :</p>
+<ul>
+  <li>La durée du mouvement est inférieure ou égale à 5 secondes ;</li>
+  <li>L'utilisateur peut arrêter et relancer le mouvement ;</li>
+  <li>L'utilisateur peut afficher et masquer le contenu en mouvement ;</li>
+  <li>L'utilisateur peut afficher la totalité de l'information sans le mouvement.</li>
+</ul>
+<p>Concernant les séquences sonores, contrôler que :</p>
+<ul>
+  <li>La durée est inférieure ou égale à 3 secondes ;</li>
+  <li>La séquence sonore peut être stoppée sur action de l'utilisateur ;</li>
+  <li>Le volume de la séquence sonore peut être contrôlé par l'utilisateur indépendamment du contrôle de volume du système.</li>
+</ul>`,
+      why: `<p>Il est important de laisser aux utilisateurs le contrôle des animations lors de la consultation du contenu et de ne pas les perturber en imposant des éléments pouvant gêner leur attention ou concentration.</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-4" target="_blank" rel="noopener" class="rgaa-badge">4.10<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-4" target="_blank" rel="noopener" class="rgaa-badge">4.11<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-13" target="_blank" rel="noopener" class="rgaa-badge">13.7<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-13" target="_blank" rel="noopener" class="rgaa-badge">13.8<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
+    },
+    'page-title': {
+      howToCheck: `<p>Le titre de la page s'affiche dans l'onglet du navigateur.</p>
+<p>Sur l'échantillon, contrôler que :</p>
+<ul>
+  <li>Le titre de chaque page est composée du titre de son contenu, suivi du nom du site ;</li>
+  <li>Le titre est pertinent et unique ;</li>
+  <li>Sur une page de résultat de recherche, le titre est « Résultat de la page de recherche de xxx page 1 - nom du site » ;</li>
+  <li>Sur une page de confirmation d'action, le titre indique le résultat de l'action (suivi du nom du site).</li>
+</ul>`,
+      why: `<p>Le titre de la page permet l'identification des contenus de la page dans l'onglet, dans les favoris, dans l'historique de navigation, dans la fenêtre du navigateur ou encore par les lecteurs d'écran.</p>
+<p>Un titre pertinent améliore le référencement et la présentation dans les moteurs de recherche.</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-8" target="_blank" rel="noopener" class="rgaa-badge">8.5<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-8" target="_blank" rel="noopener" class="rgaa-badge">8.6<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
+    },
+    'headings-hierarchy': {
+      howToCheck: `<p>Sur l'échantillon, lancer l'extension headingsMap (symbolisée par le pictogramme <strong>[h/]</strong>). Vérifier qu'il y a au moins un titre de niveau 1 et que l'arbre des titres est logique et cohérent.</p>
+<p>Télécharger l'extension headingsMap :</p>
+<ul>
+  <li><a href="https://chrome.google.com/webstore/detail/headingsmap/" target="_blank" rel="noopener" class="external-link">Extension pour Chrome<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+  <li><a href="https://addons.mozilla.org/fr/firefox/addon/headingsmap/" target="_blank" rel="noopener" class="external-link">Extension pour Firefox<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+  <li><a href="https://microsoftedge.microsoft.com/addons/detail/headingsmap/" target="_blank" rel="noopener" class="external-link">Extension pour Edge<span class="external-link-icon-inline" aria-label="Lien externe">↗</span></a></li>
+</ul>`,
+      why: `<p>La mise en page permet avant tout la navigation sur la page pour les utilisateurs aveugles ayant un lecteur d'écran ou un clavier braille : ils ont ainsi connaissance de la structuration de la page et peuvent naviguer de titre en titre sans être obligés de lire l'ensemble du contenu.</p>
+<p>Ce principe est d'ailleurs valable pour les outils bureautiques de type Document Writer ou Word ou encore PDF : il est indispensable d'utiliser les « styles » et non pas une mise en forme du texte.</p>
+<p>De manière plus générale, une bonne hiérarchisation permet une meilleure visualisation et permet l'extraction du plan de chaque page aux outils dédiés (dont ceux d'indexation, avec par conséquent un meilleur référencement).</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-9" target="_blank" rel="noopener" class="rgaa-badge">9.1<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-9" target="_blank" rel="noopener" class="rgaa-badge">9.2<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
+    },
+    'form-fields': {
+      howToCheck: `<p>Pour tout champ de saisie, notamment dans les formulaires, contrôler que :</p>
+<ul>
+  <li>En cliquant sur les intitulés des champs, le curseur vient bien se positionner dans le champ concerné ;</li>
+  <li>Les intitulés des champs sont accolés soit immédiatement au-dessus ou à gauche du champ ;</li>
+  <li>Une mention est présente pour les champs dont la saisie est obligatoire, soit explicitement, soit par le biais d'une indication (souvent un astérisque) dont l'explication est donnée au début du formulaire ;</li>
+  <li>Pour tout champ de formulaire présentant un type de donnée ou un format obligatoire, l'utilisateur est informé ;</li>
+  <li>Tout message d'erreur identifie le champ concerné.</li>
+</ul>`,
+      why: `<p>L'association - visuellement et dans le code - entre l'intitulé, le champ concerné et les informations de saisie (type de donnée demandé, format, champ obligatoire…) évite l'agacement et l'incompréhension des utilisateurs. Elle leur permet d'identifier sans ambiguïté les champs de formulaire et la nature des informations à saisir, et ainsi de prévenir les erreurs. Elle améliore l'accessibilité en permettant l'utilisation des aides techniques (les lecteurs d'écran par exemple).</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.1<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.2<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.3<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.4<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.5<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.6<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.7<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.8<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.9<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.10<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.11<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-11" target="_blank" rel="noopener" class="rgaa-badge">11.13<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
+    },
+    'download-info': {
+      howToCheck: `<p>Pour chaque fichier proposé en téléchargement, contrôler que :</p>
+<ul>
+  <li>Le format est indiqué ;</li>
+  <li>La taille est indiquée ;</li>
+  <li>La langue, lorsque ce n'est pas la même que celle de la page, est indiquée ;</li>
+  <li>Le nom du fichier permet d'en identifier le contenu et la provenance.</li>
+</ul>`,
+      why: `<p>Les utilisateurs - y compris ceux en situation de handicap - doivent savoir s'il est pertinent pour eux de télécharger les fichiers et si leurs outils le leur permettent.</p>`,
+      rgaaCriteria: `<div class="rgaa-criteria-list">
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-6" target="_blank" rel="noopener" class="rgaa-badge">6.1<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+  <a href="https://www.numerique.gouv.fr/publications/rgaa-accessibilite/methode-rgaa/criteres/#criteres-6" target="_blank" rel="noopener" class="rgaa-badge">6.2<span class="external-link-icon" aria-label="Lien externe">↗</span></a>
+</div>`
     }
   };
   
