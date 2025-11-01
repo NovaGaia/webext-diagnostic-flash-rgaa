@@ -10,33 +10,33 @@ function testKeyboardNavigation() {
   testItem.id = `test-${testId}`;
   
   testItem.innerHTML = `
-    <div class="test-name">La navigation et l'utilisation du site peuvent s'effectuer entièrement au clavier</div>
-    <div class="test-description">Visualisation de l'ordre de tabulation (TAB) pour vérifier la navigation au clavier</div>
+    <div class="test-name">${t('testKeyboardNavigationName')}</div>
+    <div class="test-description">${t('testKeyboardNavigationDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div class="auto-check" id="test-${testId}-info">
-        ℹ️ Activez la visualisation pour voir l'ordre de tabulation des éléments interactifs
+        ${t('testKeyboardNavigationInfo')}
       </div>
     </div>
     <div class="test-actions">
       <div class="test-controls">
-        <button class="button-small" id="test-${testId}-toggle">Activer la visualisation</button>
+        <button class="button-small" id="test-${testId}-toggle">${t('testKeyboardNavigationToggle')}</button>
         <label class="checkbox-label">
           <input type="checkbox" id="test-${testId}-show-hidden">
-          <span>Afficher les éléments masqués</span>
+          <span>${t('testKeyboardNavigationShowHidden')}</span>
         </label>
       </div>
       <div class="test-validation">
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-passed" value="passed">
-          <label for="test-${testId}-passed">✓ Réussi</label>
+          <label for="test-${testId}-passed">${t('validationPassed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-failed" value="failed">
-          <label for="test-${testId}-failed">✗ Échoué</label>
+          <label for="test-${testId}-failed">${t('validationFailed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-tested" value="not-tested" checked>
-          <label for="test-${testId}-not-tested">Non testé</label>
+          <label for="test-${testId}-not-tested">${t('validationNotTested')}</label>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@ function testKeyboardNavigation() {
   toggleBtn.addEventListener('click', () => {
     isVisualizationActive = !isVisualizationActive;
     toggleKeyboardVisualization(testId, isVisualizationActive, showHiddenElements);
-    toggleBtn.textContent = isVisualizationActive ? 'Désactiver la visualisation' : 'Activer la visualisation';
+    toggleBtn.textContent = isVisualizationActive ? t('testKeyboardNavigationToggleOff') : t('testKeyboardNavigationToggle');
   });
   
   // Écouteur pour la checkbox d'éléments masqués
@@ -89,21 +89,21 @@ function updateKeyboardTestStatus(testId, validationValue) {
   if (validationValue === 'passed') {
     testItem.className = 'test-item passed';
     status = 'passed';
-    resultsMessage = 'Test réussi';
+    resultsMessage = t('statusPassed');
   } else if (validationValue === 'failed') {
     testItem.className = 'test-item failed';
     status = 'failed';
-    resultsMessage = 'Test échoué';
+    resultsMessage = t('statusFailed');
   } else {
     // not-tested
     testItem.className = 'test-item';
     status = '';
-    resultsMessage = 'En attente de validation';
+    resultsMessage = t('statusPending');
   }
   
   // Mettre à jour les stats
   const testData = {
-    name: 'La navigation et l\'utilisation du site peuvent s\'effectuer entièrement au clavier',
+    name: t('testKeyboardNavigationNameForStats'),
     status: status,
     results: resultsMessage
   };

@@ -31,7 +31,7 @@ function initTests() {
     })()
   `, (result, isException) => {
     if (isException) {
-      showError('Erreur lors de l\'analyse de la page: ' + isException);
+      showError(t('errorPageAnalysis') + ': ' + isException);
     } else {
       console.log('Page analysée:', result);
       // Lancer les tests
@@ -63,10 +63,10 @@ function resetAllTests() {
   
   // Réinitialiser les boutons toggle
   document.querySelectorAll('.button-small').forEach(btn => {
-    if (btn.textContent.includes('Activer')) {
-      btn.textContent = 'Activer la visualisation';
-    } else if (btn.textContent.includes('Désactiver')) {
-      btn.textContent = 'Activer la visualisation';
+    if (btn.textContent.includes('Activer') || btn.textContent.includes('Deactivate')) {
+      btn.textContent = t('testKeyboardNavigationToggle');
+    } else if (btn.textContent.includes('Désactiver') || btn.textContent.includes('Activate')) {
+      btn.textContent = t('testKeyboardNavigationToggle');
     }
   });
   
@@ -84,7 +84,7 @@ function resetAllTests() {
     })()
   `, (result, isException) => {
     if (isException) {
-      showError('Erreur lors de la réinitialisation: ' + isException);
+      showError(t('errorReset') + ': ' + isException);
     } else {
       simulateTests();
     }
@@ -104,8 +104,8 @@ function simulateTests() {
     const content = document.getElementById(`category-${categoryId}`);
     content.innerHTML = `
       <div class="test-item">
-        <div class="test-name">⚠️ Tests non implémentés</div>
-        <div class="test-description">Les tests pour cette catégorie seront implémentés prochainement.</div>
+        <div class="test-name">${t('testsNotImplemented')}</div>
+        <div class="test-description">${t('testsNotImplementedDesc')}</div>
       </div>
     `;
   });
@@ -118,7 +118,22 @@ resetBtn.addEventListener('click', () => {
   resetAllTests();
 });
 
+// Initialiser les traductions dans le DOM
+function initTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  
+  // Mettre à jour le bouton de réinitialisation
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) {
+    resetBtn.textContent = t('statsReset');
+  }
+}
+
 // Initialisation
+initTranslations();
 initCategories();
 initTests(); // Lancer les tests automatiquement
-console.log('Panneau DevTools initialisé avec les catégories RGAA');
+console.log(t('panelInitialized'));

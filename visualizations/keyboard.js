@@ -396,6 +396,7 @@ function toggleKeyboardVisualization(testId, isActive, showHidden = false) {
         }
         
         // Extraire un message d'erreur lisible
+        // Note: Les traductions seront appliquées côté panel
         let errorMsg = 'Erreur dans le script de visualisation';
         try {
           if (error) {
@@ -431,13 +432,13 @@ function toggleKeyboardVisualization(testId, isActive, showHidden = false) {
   chrome.devtools.inspectedWindow.eval(script, (result, isException) => {
     const infoElement = document.getElementById(`test-${testId}-info`);
     if (!infoElement) {
-      console.warn('Élément info non trouvé pour le test:', testId);
+      console.warn(t('warningInfoNotFound') + ':', testId);
       return;
     }
     
     // Si result contient une erreur, la traiter
     if (result && result.error) {
-      infoElement.textContent = '✗ Erreur: ' + result.error;
+      infoElement.textContent = '✗ ' + t('errorVisualization') + ': ' + result.error;
       infoElement.className = 'auto-check failed';
       return;
     }
@@ -445,7 +446,7 @@ function toggleKeyboardVisualization(testId, isActive, showHidden = false) {
     // Si isException est présent, gérer l'exception
     if (isException) {
       // Gérer différents types d'erreurs de manière sécurisée
-      let errorMessage = 'Erreur dans le script injecté';
+      let errorMessage = t('errorInjectedScript');
       try {
         if (typeof isException === 'string') {
           errorMessage = isException;
@@ -473,43 +474,43 @@ function toggleKeyboardVisualization(testId, isActive, showHidden = false) {
         }
       } catch (e) {
         // Si tout échoue, utiliser le message par défaut
-        errorMessage = 'Erreur dans le script injecté';
+        errorMessage = t('errorInjectedScript');
       }
       
-      infoElement.textContent = '✗ Erreur: ' + errorMessage;
+      infoElement.textContent = '✗ ' + t('errorVisualization') + ': ' + errorMessage;
       infoElement.className = 'auto-check failed';
       
       // Log minimal pour le débogage (sans passer l'objet directement)
-      console.error('Erreur lors de la visualisation clavier:', errorMessage);
+      console.error(t('errorVisualization') + ':', errorMessage);
       return;
     }
     
     // Traiter le résultat
     if (result) {
       if (result.active === true) {
-        let message = `✓ Visualisation active: ${result.count || 0} éléments affichés`;
+        let message = `✓ ${t('testKeyboardNavigationActive')}: ${result.count || 0} ${t('testKeyboardNavigationDisplayedCount')}`;
         if (result.totalCount && result.totalCount > result.count) {
-          message += ` sur ${result.totalCount} total`;
+          message += ' ' + t('testKeyboardNavigationTotalCount', { total: result.totalCount });
         }
         if (result.hiddenCount > 0 && showHidden) {
-          message += ` (${result.visibleCount || 0} visibles, ${result.hiddenCount} masqués en orange)`;
+          message += ` (${result.visibleCount || 0} ${t('testKeyboardNavigationVisible')}, ${result.hiddenCount} ${t('testKeyboardNavigationHidden')})`;
         } else if (result.totalCount && result.totalCount > result.count) {
-          message += ` (${result.totalCount - result.count} éléments masqués non affichés)`;
+          message += ` (${result.totalCount - result.count} ${t('testKeyboardNavigationHiddenNotDisplayed')})`;
         }
         infoElement.textContent = message;
         infoElement.className = 'auto-check passed';
       } else if (result.error) {
         // Le script a retourné une erreur
-        infoElement.textContent = '✗ Erreur: ' + String(result.error);
+        infoElement.textContent = '✗ ' + t('errorVisualization') + ': ' + String(result.error);
         infoElement.className = 'auto-check failed';
       } else {
         // Résultat inattendu
-        infoElement.textContent = 'ℹ️ Visualisation désactivée';
+        infoElement.textContent = 'ℹ️ ' + t('testKeyboardNavigationInactive');
         infoElement.className = 'auto-check';
       }
     } else {
       // Pas de résultat
-      infoElement.textContent = 'ℹ️ Visualisation désactivée';
+      infoElement.textContent = 'ℹ️ ' + t('testKeyboardNavigationInactive');
       infoElement.className = 'auto-check';
     }
   });

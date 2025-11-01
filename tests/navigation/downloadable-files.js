@@ -10,26 +10,26 @@ function testDownloadableFiles() {
   testItem.id = `test-${testId}`;
   
   testItem.innerHTML = `
-    <div class="test-name">Les fichiers bureautiques téléchargeables sur le site sont proposés dans un format ouvert et sont accessibles</div>
-    <div class="test-description">Vérifiez que les fichiers téléchargeables (PDF, DOC, etc.) sont disponibles dans un format ouvert (ODT, ODS, PDF/A, HTML, etc.) et sont accessibles</div>
+    <div class="test-name">${t('testDownloadableFilesName')}</div>
+    <div class="test-description">${t('testDownloadableFilesDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div class="auto-check" id="test-${testId}-info">
-        🔍 Recherche des fichiers téléchargeables en cours...
+        ${t('testDownloadableFilesSearching')}
       </div>
     </div>
     <div class="test-actions">
       <div class="test-validation">
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-passed" value="passed">
-          <label for="test-${testId}-passed">✓ Réussi</label>
+          <label for="test-${testId}-passed">${t('validationPassed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-failed" value="failed">
-          <label for="test-${testId}-failed">✗ Échoué</label>
+          <label for="test-${testId}-failed">${t('validationFailed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-tested" value="not-tested" checked>
-          <label for="test-${testId}-not-tested">Non testé</label>
+          <label for="test-${testId}-not-tested">${t('validationNotTested')}</label>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@ function detectDownloadableFiles(testId) {
     if (!infoElement) return;
     
     if (isException) {
-      infoElement.textContent = '✗ Erreur lors de la détection: ' + isException;
+      infoElement.textContent = '✗ ' + t('errorDetection') + ': ' + (isException.value || isException);
       infoElement.className = 'auto-check failed';
       return;
     }
@@ -116,15 +116,23 @@ function detectDownloadableFiles(testId) {
     // Afficher les résultats
     let message = '';
     if (results.totalFiles === 0) {
-      message = 'ℹ️ Aucun fichier bureautique détecté sur la page';
+      message = t('testDownloadableFilesNone');
       infoElement.className = 'auto-check';
     } else {
-      message = `📄 ${results.totalFiles} fichier(s) bureautique(s) détecté(s)`;
+      message = t('testDownloadableFilesFound', { count: results.totalFiles });
       if (results.openFormatFiles.length > 0) {
-        message += ` (${results.openFormatFiles.length} en format ouvert: ${results.openFormatFiles.map(f => f.format).join(', ')})`;
+        const formats = results.openFormatFiles.map(f => f.format).join(', ');
+        message += t('testDownloadableFilesOpenFormat', { 
+          openCount: results.openFormatFiles.length, 
+          formats: formats 
+        });
       }
       if (results.closedFormatFiles.length > 0) {
-        message += ` - ${results.closedFormatFiles.length} en format fermé: ${results.closedFormatFiles.map(f => f.format).join(', ')}`;
+        const formats = results.closedFormatFiles.map(f => f.format).join(', ');
+        message += ' - ' + t('testDownloadableFilesClosedFormat', { 
+          closedCount: results.closedFormatFiles.length, 
+          formats: formats 
+        });
       }
       infoElement.className = 'auto-check ' + (results.closedFormatFiles.length > 0 ? 'warning' : 'passed');
     }
@@ -144,21 +152,21 @@ function updateDownloadableFilesStatus(testId, validationValue) {
   if (validationValue === 'passed') {
     testItem.className = 'test-item passed';
     status = 'passed';
-    resultsMessage = 'Test réussi';
+    resultsMessage = t('statusPassed');
   } else if (validationValue === 'failed') {
     testItem.className = 'test-item failed';
     status = 'failed';
-    resultsMessage = 'Test échoué';
+    resultsMessage = t('statusFailed');
   } else {
     // not-tested
     testItem.className = 'test-item';
     status = '';
-    resultsMessage = 'En attente de validation';
+    resultsMessage = t('statusPending');
   }
   
   // Mettre à jour les stats
   const testData = {
-    name: 'Les fichiers bureautiques téléchargeables sur le site sont proposés dans un format ouvert et sont accessibles',
+    name: t('testDownloadableFilesNameForStats'),
     status: status,
     results: resultsMessage
   };

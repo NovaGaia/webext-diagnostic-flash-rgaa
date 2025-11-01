@@ -316,21 +316,21 @@
   <div class="container">
     <h1>🔍 Diagnostic Flash RGAA</h1>
     
-    <button class="button secondary" id="resetBtn" style="margin-bottom: 20px;">Réinitialiser tous les tests</button>
+    <button class="button secondary" id="resetBtn" style="margin-bottom: 20px;" data-i18n="statsReset">Réinitialiser tous les tests</button>
     
     <div class="categories" id="categories">
       <div class="stats" id="stats">
         <div class="stat">
           <div class="stat-value" id="totalTests">0</div>
-          <div class="stat-label">Tests effectués</div>
+          <div class="stat-label" data-i18n="statsTotal">Total</div>
         </div>
         <div class="stat">
           <div class="stat-value" id="passedTests" style="color: #4caf50;">0</div>
-          <div class="stat-label">Réussis</div>
+          <div class="stat-label" data-i18n="statsPassed">Réussis</div>
         </div>
         <div class="stat">
           <div class="stat-value" id="failedTests" style="color: #f44336;">0</div>
-          <div class="stat-label">Échoués</div>
+          <div class="stat-label" data-i18n="statsFailed">Échoués</div>
         </div>
       </div>
       
@@ -338,12 +338,12 @@
         <div class="category-header" data-category-toggle="navigation">
           <span>
             <span class="category-icon">🧭</span>
-            Navigation & utilisation
+            <span data-i18n="categoryNavigation">Navigation & utilisation</span>
           </span>
           <span class="category-arrow">▶</span>
         </div>
         <div class="category-content" id="category-navigation">
-          <div class="empty-state">Aucun test effectué pour cette catégorie</div>
+          <div class="empty-state" data-i18n="emptyState">Aucun test effectué pour cette catégorie</div>
         </div>
       </div>
       
@@ -351,12 +351,12 @@
         <div class="category-header" data-category-toggle="langage">
           <span>
             <span class="category-icon">🌐</span>
-            Langage & interface
+            <span data-i18n="categoryLangage">Langage & interface</span>
           </span>
           <span class="category-arrow">▶</span>
         </div>
         <div class="category-content" id="category-langage">
-          <div class="empty-state">Aucun test effectué pour cette catégorie</div>
+          <div class="empty-state" data-i18n="emptyState">Aucun test effectué pour cette catégorie</div>
         </div>
       </div>
       
@@ -364,18 +364,19 @@
         <div class="category-header" data-category-toggle="structuration">
           <span>
             <span class="category-icon">📋</span>
-            Structuration de l'information
+            <span data-i18n="categoryStructuration">Structuration de l'information</span>
           </span>
           <span class="category-arrow">▶</span>
         </div>
         <div class="category-content" id="category-structuration">
-          <div class="empty-state">Aucun test effectué pour cette catégorie</div>
+          <div class="empty-state" data-i18n="emptyState">Aucun test effectué pour cette catégorie</div>
         </div>
       </div>
     </div>
   </div>
   
   <!-- Modules utilitaires -->
+  <script src="utils/i18n.js"></script>
   <script src="utils/cleanup.js"></script>
   <script src="utils/stats.js"></script>
   <script src="utils/ui.js"></script>

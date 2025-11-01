@@ -3,17 +3,17 @@
 // Structure des catégories
 const categories = {
   navigation: {
-    name: 'Navigation & utilisation',
+    name: t('categoryNavigation'),
     icon: '🧭',
     tests: []
   },
   langage: {
-    name: 'Langage & interface',
+    name: t('categoryLangage'),
     icon: '🌐',
     tests: []
   },
   structuration: {
-    name: 'Structuration de l\'information',
+    name: t('categoryStructuration'),
     icon: '📋',
     tests: []
   }
@@ -45,17 +45,17 @@ function updateStats() {
   if (totalEl) {
     totalEl.textContent = total;
   } else {
-    console.warn('Élément totalTests non trouvé');
+    console.warn(t('warningTotalTestsNotFound'));
   }
   if (passedEl) {
     passedEl.textContent = passed;
   } else {
-    console.warn('Élément passedTests non trouvé');
+    console.warn(t('warningPassedTestsNotFound'));
   }
   if (failedEl) {
     failedEl.textContent = failed;
   } else {
-    console.warn('Élément failedTests non trouvé');
+    console.warn(t('warningFailedTestsNotFound'));
   }
 }
 
@@ -63,7 +63,7 @@ function updateStats() {
 function resetResults() {
   Object.keys(categories).forEach(categoryId => {
     const content = document.getElementById(`category-${categoryId}`);
-    content.innerHTML = '<div class="empty-state">Aucun test effectué pour cette catégorie</div>';
+    content.innerHTML = `<div class="empty-state">${t('emptyState')}</div>`;
     categories[categoryId].tests = [];
   });
   updateStats();

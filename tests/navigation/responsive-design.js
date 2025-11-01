@@ -11,33 +11,33 @@ function testResponsiveDesign() {
   testItem.id = `test-${testId}`;
   
   testItem.innerHTML = `
-    <div class="test-name">Le site est optimisé pour toutes les tailles d'écran</div>
-    <div class="test-description">Vérification que le site est utilisable sur mobile (viewport 390 × 844 pixels)</div>
+    <div class="test-name">${t('testResponsiveDesignName')}</div>
+    <div class="test-description">${t('testResponsiveDesignDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div class="auto-check" id="test-${testId}-viewport">
-        🔍 Vérification en cours...
+        ${t('testResponsiveDesignCheckViewport')}
       </div>
       <div class="auto-check" id="test-${testId}-overflow">
-        🔍 Vérification en cours...
+        ${t('testResponsiveDesignCheckOverflow')}
       </div>
       <div class="auto-check" id="test-${testId}-elements">
-        🔍 Vérification en cours...
+        ${t('testResponsiveDesignCheckElements')}
       </div>
     </div>
     <div class="test-actions">
-      <button class="button-small" id="test-${testId}-simulate">Simuler mobile (390×844)</button>
+      <button class="button-small" id="test-${testId}-simulate">${t('testResponsiveDesignSimulate')}</button>
       <div class="test-validation">
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-passed" value="passed">
-          <label for="test-${testId}-passed">✓ Réussi</label>
+          <label for="test-${testId}-passed">${t('validationPassed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-failed" value="failed">
-          <label for="test-${testId}-failed">✗ Échoué</label>
+          <label for="test-${testId}-failed">${t('validationFailed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-tested" value="not-tested" checked>
-          <label for="test-${testId}-not-tested">Non testé</label>
+          <label for="test-${testId}-not-tested">${t('validationNotTested')}</label>
         </div>
       </div>
     </div>
@@ -64,8 +64,20 @@ function testResponsiveDesign() {
 
 // Exécuter les vérifications automatiques du responsive design
 function runResponsiveDesignChecks(testId) {
+  // Préparer les traductions pour le script injecté
+  const translations = {
+    viewportPresent: t('testResponsiveDesignViewportPresent'),
+    viewportMisconfigured: t('testResponsiveDesignViewportMisconfigured'),
+    viewportMissing: t('testResponsiveDesignViewportMissing'),
+    noOverflow: t('testResponsiveDesignNoOverflow'),
+    overflowDetected: t('testResponsiveDesignOverflowDetected'),
+    noInteractiveElements: t('testResponsiveDesignNoInteractiveElements'),
+    allAccessible: t('testResponsiveDesignAllAccessible'),
+    someHidden: t('testResponsiveDesignSomeHidden')
+  };
+  
   chrome.devtools.inspectedWindow.eval(`
-    (function() {
+    (function(translations) {
       const results = {
         viewport: { passed: false, message: '' },
         overflow: { passed: false, message: '' },
@@ -78,14 +90,14 @@ function runResponsiveDesignChecks(testId) {
         const content = viewportMeta.getAttribute('content') || '';
         if (content.includes('width') || content.includes('device-width')) {
           results.viewport.passed = true;
-          results.viewport.message = '✓ Meta viewport présente';
+          results.viewport.message = translations.viewportPresent;
         } else {
           results.viewport.passed = false;
-          results.viewport.message = '✗ Meta viewport présente mais mal configurée';
+          results.viewport.message = translations.viewportMisconfigured;
         }
       } else {
         results.viewport.passed = false;
-        results.viewport.message = '✗ Meta viewport manquante';
+        results.viewport.message = translations.viewportMissing;
       }
       
       // Vérification 2: Débordement horizontal (avec viewport mobile simulé)
@@ -99,10 +111,11 @@ function runResponsiveDesignChecks(testId) {
       const mobileWidth = 390;
       if (bodyWidth <= mobileWidth && htmlWidth <= mobileWidth) {
         results.overflow.passed = true;
-        results.overflow.message = '✓ Pas de débordement horizontal détecté';
+        results.overflow.message = translations.noOverflow;
       } else {
         results.overflow.passed = false;
-        results.overflow.message = '⚠ Débordement horizontal possible (largeur: ' + Math.max(bodyWidth, htmlWidth) + 'px)';
+        const maxWidth = Math.max(bodyWidth, htmlWidth);
+        results.overflow.message = translations.overflowDetected.replace('{width}', maxWidth);
       }
       
       // Vérification 3: Éléments critiques accessibles
@@ -122,22 +135,24 @@ function runResponsiveDesignChecks(testId) {
       
       if (totalElements === 0) {
         results.elements.passed = true;
-        results.elements.message = '✓ Aucun élément interactif à vérifier';
+        results.elements.message = translations.noInteractiveElements;
       } else if (accessibleElements === totalElements) {
         results.elements.passed = true;
-        results.elements.message = '✓ Tous les éléments interactifs sont accessibles (' + totalElements + ' éléments)';
+        results.elements.message = translations.allAccessible.replace('{count}', totalElements);
       } else {
         results.elements.passed = false;
-        results.elements.message = '⚠ Certains éléments peuvent être cachés (' + (totalElements - accessibleElements) + ' sur ' + totalElements + ')';
+        const hiddenCount = totalElements - accessibleElements;
+        results.elements.message = translations.someHidden.replace('{hidden}', hiddenCount).replace('{total}', totalElements);
       }
       
       return results;
-    })()
+    })(${JSON.stringify(translations)})
   `, (results, isException) => {
     if (isException) {
-      updateCheckResult(testId, 'viewport', false, 'Erreur: ' + isException);
-      updateCheckResult(testId, 'overflow', false, 'Erreur: ' + isException);
-      updateCheckResult(testId, 'elements', false, 'Erreur: ' + isException);
+      const errorMsg = t('errorInjectedScript') + ': ' + (isException.value || isException);
+      updateCheckResult(testId, 'viewport', false, errorMsg);
+      updateCheckResult(testId, 'overflow', false, errorMsg);
+      updateCheckResult(testId, 'elements', false, errorMsg);
       return;
     }
     
@@ -159,18 +174,14 @@ function updateCheckResult(testId, checkType, passed, message) {
 
 // Simuler le viewport mobile
 function simulateMobileViewport() {
+  const instructions = t('testResponsiveDesignMobileInstructions');
   chrome.devtools.inspectedWindow.eval(`
-    (function() {
+    (function(instructions) {
       // Instructions pour l'utilisateur
-      alert('Pour tester le responsive design:\\n\\n' +
-            '1. Ouvrez les DevTools (F12)\\n' +
-            '2. Activez le mode "Device Toolbar" (Cmd+Shift+M / Ctrl+Shift+M)\\n' +
-            '3. Sélectionnez "iPhone 12 Pro" ou définissez 390 × 844 pixels\\n' +
-            '4. Vérifiez visuellement que le site reste utilisable\\n' +
-            '5. Cochez la case de validation dans le panneau Diagnostic Flash RGAA');
+      alert(instructions);
       
       return { message: 'Instructions affichées' };
-    })()
+    })(${JSON.stringify(instructions)})
   `, (result, isException) => {
     console.log('Simulation mobile:', result);
   });
@@ -200,24 +211,24 @@ function updateTestStatus(testId, validationValue) {
     testItem.className = 'test-item passed';
     status = 'passed';
     if (autoChecksPassed) {
-      resultsMessage = 'Test réussi';
+      resultsMessage = t('statusPassed');
     } else {
-      resultsMessage = 'Validé manuellement (certaines vérifications automatiques peuvent échouer)';
+      resultsMessage = t('statusWarning');
     }
   } else if (validationValue === 'failed') {
     testItem.className = 'test-item failed';
     status = 'failed';
-    resultsMessage = 'Test échoué';
+    resultsMessage = t('statusFailed');
   } else {
     // not-tested
     testItem.className = 'test-item';
     status = '';
-    resultsMessage = 'En attente de validation';
+    resultsMessage = t('statusPending');
   }
   
   // Mettre à jour les stats
   const testData = {
-    name: 'Le site est optimisé pour toutes les tailles d\'écran',
+    name: t('testResponsiveDesignNameForStats'),
     status: status,
     results: resultsMessage
   };

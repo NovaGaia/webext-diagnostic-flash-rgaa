@@ -10,26 +10,26 @@ function testTwoNavigationMeans() {
   testItem.id = `test-${testId}`;
   
   testItem.innerHTML = `
-    <div class="test-name">Deux moyens de navigation sont présents</div>
-    <div class="test-description">Vérifiez manuellement que le site propose au moins deux moyens de navigation différents (menu, plan du site, moteur de recherche, fil d'Ariane, etc.)</div>
+    <div class="test-name">${t('testTwoNavigationMeansName')}</div>
+    <div class="test-description">${t('testTwoNavigationMeansDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div class="auto-check" id="test-${testId}-info">
-        ℹ️ Test à valider manuellement
+        ${t('testTwoNavigationMeansInfo')}
       </div>
     </div>
     <div class="test-actions">
       <div class="test-validation">
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-passed" value="passed">
-          <label for="test-${testId}-passed">✓ Réussi</label>
+          <label for="test-${testId}-passed">${t('validationPassed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-failed" value="failed">
-          <label for="test-${testId}-failed">✗ Échoué</label>
+          <label for="test-${testId}-failed">${t('validationFailed')}</label>
         </div>
         <div class="validation-option">
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-tested" value="not-tested" checked>
-          <label for="test-${testId}-not-tested">Non testé</label>
+          <label for="test-${testId}-not-tested">${t('validationNotTested')}</label>
         </div>
       </div>
     </div>
@@ -57,21 +57,21 @@ function updateTwoNavigationMeansStatus(testId, validationValue) {
   if (validationValue === 'passed') {
     testItem.className = 'test-item passed';
     status = 'passed';
-    resultsMessage = 'Test réussi';
+    resultsMessage = t('statusPassed');
   } else if (validationValue === 'failed') {
     testItem.className = 'test-item failed';
     status = 'failed';
-    resultsMessage = 'Test échoué';
+    resultsMessage = t('statusFailed');
   } else {
     // not-tested
     testItem.className = 'test-item';
     status = '';
-    resultsMessage = 'En attente de validation';
+    resultsMessage = t('statusPending');
   }
   
   // Mettre à jour les stats
   const testData = {
-    name: 'Deux moyens de navigation sont présents',
+    name: t('testTwoNavigationMeansNameForStats'),
     status: status,
     results: resultsMessage
   };
