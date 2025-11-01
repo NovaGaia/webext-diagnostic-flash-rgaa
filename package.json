@@ -1,0 +1,23 @@
+{
+  "name": "webext-dagnostic-flash-rgaa",
+  "version": "1.0.0",
+  "description": "Extension navigateur pour réaliser les diagnostics flash d'accessibilité",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required for now'",
+    "package": "zip -r extension.zip . -x '*.git*' '*.DS_Store' 'node_modules/*' '*.zip'",
+    "generate-icons": "node generate-icons.js"
+  },
+  "keywords": [
+    "extension",
+    "browser",
+    "chrome",
+    "firefox",
+    "accessibility",
+    "rgaa"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}

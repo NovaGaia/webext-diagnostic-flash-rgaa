@@ -1,0 +1,122 @@
+// Fichier principal du panneau DevTools
+// Ce fichier orchestre tous les modules
+
+// Connexion au service worker pour communiquer avec la page
+const port = chrome.runtime.connect({
+  name: 'devtools-panel'
+});
+
+// Éléments DOM
+const categoriesDiv = document.getElementById('categories');
+const statsDiv = document.getElementById('stats');
+const resetBtn = document.getElementById('resetBtn');
+
+// Lancer l'analyse automatiquement au chargement
+function initTests() {
+  // Afficher les catégories et statistiques
+  categoriesDiv.style.display = 'block';
+  statsDiv.style.display = 'flex';
+  
+  // Réinitialiser les résultats
+  resetResults();
+  
+  // Lancer l'analyse
+  chrome.devtools.inspectedWindow.eval(`
+    (function() {
+      return {
+        url: window.location.href,
+        title: document.title,
+        ready: true
+      };
+    })()
+  `, (result, isException) => {
+    if (isException) {
+      showError('Erreur lors de l\'analyse de la page: ' + isException);
+    } else {
+      console.log('Page analysée:', result);
+      // Lancer les tests
+      simulateTests();
+    }
+  });
+}
+
+// Réinitialiser tous les tests (remise à zéro complète)
+function resetAllTests() {
+  // Nettoyer toutes les visualisations
+  cleanupAllVisualizations();
+  
+  // Réinitialiser les catégories
+  Object.keys(categories).forEach(categoryId => {
+    categories[categoryId].tests = [];
+  });
+  
+  // Réinitialiser tous les boutons radio à "Non testé"
+  document.querySelectorAll('input[type="radio"][value="not-tested"]').forEach(radio => {
+    radio.checked = true;
+  });
+  
+  // Réinitialiser les classes CSS des tests (enlever passed, failed, warning)
+  document.querySelectorAll('.test-item').forEach(item => {
+    item.classList.remove('passed', 'failed', 'warning');
+    item.className = 'test-item';
+  });
+  
+  // Réinitialiser les boutons toggle
+  document.querySelectorAll('.button-small').forEach(btn => {
+    if (btn.textContent.includes('Activer')) {
+      btn.textContent = 'Activer la visualisation';
+    } else if (btn.textContent.includes('Désactiver')) {
+      btn.textContent = 'Activer la visualisation';
+    }
+  });
+  
+  // Relancer les tests pour réafficher l'interface
+  resetResults();
+  
+  // Relancer l'analyse pour réafficher les tests
+  chrome.devtools.inspectedWindow.eval(`
+    (function() {
+      return {
+        url: window.location.href,
+        title: document.title,
+        ready: true
+      };
+    })()
+  `, (result, isException) => {
+    if (isException) {
+      showError('Erreur lors de la réinitialisation: ' + isException);
+    } else {
+      simulateTests();
+    }
+  });
+}
+
+// Simuler des tests (à remplacer par de vrais tests plus tard)
+function simulateTests() {
+  // Tests de la catégorie navigation
+  testResponsiveDesign();
+  testKeyboardNavigation();
+  
+  // Pour les autres catégories, afficher un message
+  ['langage', 'structuration'].forEach(categoryId => {
+    const content = document.getElementById(`category-${categoryId}`);
+    content.innerHTML = `
+      <div class="test-item">
+        <div class="test-name">⚠️ Tests non implémentés</div>
+        <div class="test-description">Les tests pour cette catégorie seront implémentés prochainement.</div>
+      </div>
+    `;
+  });
+  
+  updateStats();
+}
+
+// Écouteur pour le bouton de réinitialisation
+resetBtn.addEventListener('click', () => {
+  resetAllTests();
+});
+
+// Initialisation
+initCategories();
+initTests(); // Lancer les tests automatiquement
+console.log('Panneau DevTools initialisé avec les catégories RGAA');
