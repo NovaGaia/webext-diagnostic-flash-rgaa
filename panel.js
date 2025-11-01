@@ -96,6 +96,8 @@ function simulateTests() {
   // Tests de la catégorie navigation
   testResponsiveDesign();
   testKeyboardNavigation();
+  testTwoNavigationMeans();
+  testDownloadableFiles();
   
   // Pour les autres catégories, afficher un message
   ['langage', 'structuration'].forEach(categoryId => {
