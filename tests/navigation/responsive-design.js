@@ -41,9 +41,13 @@ function testResponsiveDesign() {
         </div>
       </div>
     </div>
+    ${createDocumentationBlock(testId, false)}
   `;
   
   content.appendChild(testItem);
+  
+  // Initialiser le bloc de documentation
+  initDocumentationBlocks();
   
   // Lancer les vérifications automatiques
   runResponsiveDesignChecks(testId);

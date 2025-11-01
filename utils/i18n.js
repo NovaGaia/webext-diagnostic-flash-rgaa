@@ -103,6 +103,18 @@ const translations = {
     warningPassedTestsNotFound: 'Élément passedTests non trouvé',
     warningFailedTestsNotFound: 'Élément failedTests non trouvé',
     warningInfoNotFound: 'Élément info non trouvé pour le test',
+    
+    // Documentation
+    docShowDocumentation: 'Afficher la documentation',
+    docHideDocumentation: 'Masquer la documentation',
+    docHowToCheck: 'Comment contrôler ?',
+    docHowToCheckContent: 'Contenu à définir',
+    docHowToNavigateKeyboard: 'Comment navigue-t-on au clavier ?',
+    docHowToNavigateKeyboardContent: 'Contenu à définir',
+    docWhy: 'Pourquoi ?',
+    docWhyContent: 'Contenu à définir',
+    docRGAACriteria: 'Critère(s) RGAA concerné(s)',
+    docRGAACriteriaContent: 'Contenu à définir',
   },
   
   en: {
@@ -188,6 +200,18 @@ const translations = {
     warningPassedTestsNotFound: 'passedTests element not found',
     warningFailedTestsNotFound: 'failedTests element not found',
     warningInfoNotFound: 'Info element not found for test',
+    
+    // Documentation
+    docShowDocumentation: 'Show documentation',
+    docHideDocumentation: 'Hide documentation',
+    docHowToCheck: 'How to check?',
+    docHowToCheckContent: 'Content to be defined',
+    docHowToNavigateKeyboard: 'How to navigate with keyboard?',
+    docHowToNavigateKeyboardContent: 'Content to be defined',
+    docWhy: 'Why?',
+    docWhyContent: 'Content to be defined',
+    docRGAACriteria: 'RGAA criteria concerned',
+    docRGAACriteriaContent: 'Content to be defined',
   }
 };
 

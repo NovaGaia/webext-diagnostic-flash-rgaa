@@ -33,9 +33,13 @@ function testTwoNavigationMeans() {
         </div>
       </div>
     </div>
+    ${createDocumentationBlock(testId, false)}
   `;
   
   content.appendChild(testItem);
+  
+  // Initialiser le bloc de documentation
+  initDocumentationBlocks();
   
   // Écouteurs pour les options de validation
   const validationInputs = document.querySelectorAll(`input[name="test-${testId}-validation"]`);

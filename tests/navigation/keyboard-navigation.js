@@ -40,9 +40,13 @@ function testKeyboardNavigation() {
         </div>
       </div>
     </div>
+    ${createDocumentationBlock(testId, true)}
   `;
   
   content.appendChild(testItem);
+  
+  // Initialiser le bloc de documentation
+  initDocumentationBlocks();
   
   let isVisualizationActive = false;
   let showHiddenElements = false;

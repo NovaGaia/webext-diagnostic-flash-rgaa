@@ -33,9 +33,13 @@ function testDownloadableFiles() {
         </div>
       </div>
     </div>
+    ${createDocumentationBlock(testId, false)}
   `;
   
   content.appendChild(testItem);
+  
+  // Initialiser le bloc de documentation
+  initDocumentationBlocks();
   
   // Lancer la détection automatique des fichiers
   detectDownloadableFiles(testId);
