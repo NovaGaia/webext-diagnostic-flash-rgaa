@@ -18,6 +18,7 @@ function testPageTitle() {
       <div class="auto-check" id="test-${testId}-info">
         ${t('testPageTitleInfo')}
       </div>
+      <div class="page-title-detected" id="test-${testId}-detected" style="display: none;"></div>
     </div>
     <div class="test-actions">
       <div class="test-validation">
@@ -56,34 +57,44 @@ function testPageTitle() {
     })()
   `, (result, isException) => {
     const infoElement = document.getElementById(`test-${testId}-info`);
+    const detectedElement = document.getElementById(`test-${testId}-detected`);
+    
     if (infoElement) {
       if (isException) {
         const errorMsg = isException.value || isException.description || isException.message || String(isException);
         infoElement.textContent = '✗ ' + t('errorPageAnalysis') + ': ' + errorMsg;
         infoElement.className = 'auto-check failed';
-      } else if (result) {
-        let html = t('testPageTitleInfo');
-        
-        if (result.title || result.h1) {
-          html += '<div style="margin-top: 10px; padding: 10px; background-color: #f5f5f5; border-radius: 4px; font-size: 13px;">';
-          
-          if (result.title) {
-            html += `<div style="margin-bottom: 8px;"><strong>${t('testPageTitleLabel')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.title)}</code></div>`;
-          } else {
-            html += `<div style="margin-bottom: 8px; color: #999;"><strong>${t('testPageTitleLabel')}</strong> <em>${t('testPageTitleNotFound')}</em></div>`;
-          }
-          
-          if (result.h1) {
-            html += `<div><strong>${t('testPageTitleH1Label')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.h1)}</code></div>`;
-          } else {
-            html += `<div style="color: #999;"><strong>${t('testPageTitleH1Label')}</strong> <em>${t('testPageTitleH1NotFound')}</em></div>`;
-          }
-          
-          html += '</div>';
+        if (detectedElement) {
+          detectedElement.style.display = 'none';
         }
-        
-        infoElement.innerHTML = html;
+      } else if (result) {
+        // Le message "Test à valider manuellement" reste dans infoElement
+        infoElement.innerHTML = t('testPageTitleInfo');
         infoElement.className = 'auto-check';
+        
+        // Le bloc Title/H1 va dans un élément séparé
+        if (detectedElement) {
+          if (result.title || result.h1) {
+            let detectedHtml = '';
+            
+            if (result.title) {
+              detectedHtml += `<div style="margin-bottom: 8px;"><strong>${t('testPageTitleLabel')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.title)}</code></div>`;
+            } else {
+              detectedHtml += `<div style="margin-bottom: 8px; color: #999;"><strong>${t('testPageTitleLabel')}</strong> <em>${t('testPageTitleNotFound')}</em></div>`;
+            }
+            
+            if (result.h1) {
+              detectedHtml += `<div><strong>${t('testPageTitleH1Label')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.h1)}</code></div>`;
+            } else {
+              detectedHtml += `<div style="color: #999;"><strong>${t('testPageTitleH1Label')}</strong> <em>${t('testPageTitleH1NotFound')}</em></div>`;
+            }
+            
+            detectedElement.innerHTML = detectedHtml;
+            detectedElement.style.display = 'block';
+          } else {
+            detectedElement.style.display = 'none';
+          }
+        }
       }
     }
   });

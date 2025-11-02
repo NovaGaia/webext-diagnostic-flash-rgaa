@@ -129,7 +129,9 @@ Organisation en fichiers séparés : `tests/category/test-name.js`
 
 1. **`tests/langage/contrasts.js`**
    - Test : Les contrastes sont suffisants
-   - Validation : Manuelle (avec référence à l'extension Contrast Checker)
+   - Fonctionnalités : Analyse automatique complète des contrastes WCAG (1.4.3, 1.4.6, 1.4.11)
+   - Interface : Bouton "Analyser les contrastes (beta)", tableau de résultats interactif, contrôles WCAG level/auto-refresh
+   - Validation : Manuelle (basée sur les résultats de l'analyse automatique)
 
 2. **`tests/langage/animations.js`**
    - Test : Les animations, clignotements et sons sont contrôlables
@@ -236,11 +238,50 @@ function updateXxxStatus(testId, validationValue) {
 #### Modules contrastes (`tests/langage/contrasts/`)
 La logique d'analyse des contrastes a été divisée en 5 modules pour améliorer la maintenabilité :
 
-- **`utils.js`** : Fonctions utilitaires (calculateContrastRatio, hexToRgb, getLuminance, meetsWCAGAA/AAA, createColorSwatch, countTags, getAverageColor)
+- **`utils.js`** : Fonctions utilitaires (calculateContrastRatio, hexToRgb, getLuminance, meetsWCAGAA/AAA, meetsNonTextContrast, createColorSwatch, countTags, getAverageColor)
 - **`analyze.js`** : Fonction principale `analyzeContrasts` (analyse exhaustive du DOM, détection des éléments textuels et non-textuels, comptage des éléments cachés)
 - **`display.js`** : Fonction `displayContrastAnalysis` (affichage du tableau des résultats, contrôles WCAG level/auto-refresh, résumé)
 - **`highlight.js`** : Fonctions de mise en évidence (`highlightContrastElements`, `highlightNonTextElements`, `cleanupContrastHighlighting`)
 - **`observer.js`** : Variables globales et fonctions `startContrastMutationObserver`, `stopContrastMutationObserver` pour l'auto-refresh sur changement du DOM
+
+**Fonctionnalités détaillées de l'analyse des contrastes** :
+
+**Critères WCAG implémentés** :
+- **1.4.3 Contrast (Minimum) - AA** : Ratio 4.5:1 pour texte normal, 3:1 pour texte large
+- **1.4.6 Contrast (Enhanced) - AAA** : Ratio 7:1 pour texte normal, 4.5:1 pour texte large
+- **1.4.11 Non-text Contrast - AA** : Ratio 3:1 pour bordures de composants UI et icônes SVG
+
+**Analyse automatique** :
+- Parcours exhaustif de tous les éléments du DOM (`document.querySelectorAll('*')`)
+- Détection des éléments textuels (1.4.3/1.4.6) : filtrage selon la logique de l'extension WCAG Color Contrast Checker
+- Détection des éléments non-textuels (1.4.11) : bordures des composants interactifs et icônes SVG
+- Calcul de la visibilité selon plusieurs critères : `display: none`, `visibility: hidden`, attribut `hidden`, éléments hors écran, éléments dans `<details>` fermé
+- Exclusion systématique des conteneurs génériques (`div`, `section`, `article`, `header`, `footer`, `nav`, `main`, `aside`, `form`)
+- Exclusion des tags spécifiques : `script`, `noscript`, `hr`, `br`, `table`, `tbody`, `thead`, `tfoot`, `tr`, `option`, `ul`, `ol`, `dl`, `style`, `link`, `iframe`, etc.
+- Comptage précis des éléments cachés (avant les filtres, comme l'extension WCAG)
+
+**Interface d'affichage** :
+- Tableau des éléments visibles avec colonnes : Contraste, Taille, Éléments
+- Affichage des swatches de couleur (foreground et background) pour chaque résultat
+- Section "Hidden elements" : uniquement un compteur (pas de détail, car invisibles)
+- Résumé par taille (small/large) avec statut AA et AAA
+- Contrôles : sélection WCAG level (AA/AAA), auto-refresh sur changement DOM, bouton "Relancer l'analyse"
+- Mise en évidence visuelle : clic sur une ligne pour mettre en évidence les éléments correspondants sur la page avec bordure rouge
+
+**Fonctionnalités techniques** :
+- Gestion du texte : extraction via `getElementText()` avec normalisation des espaces, gestion des images alt, gestion des guillemets spéciaux
+- Calcul de la taille du texte : "large" si `fontSize >= 18.66px` ou (`fontSize >= 14px` ET `fontWeight >= 700`)
+- Remontée de la hiérarchie pour le fond : recherche du premier fond opaque en remontant jusqu'au body
+- Filtrage des ratios invalides : exclusion des ratios <= 1.01 (couleurs identiques)
+- Mise en évidence intelligente : parcours inverse du DOM pour prioriser les éléments les plus spécifiques, exclusion des parents si les enfants correspondent
+- Auto-refresh : `MutationObserver` injecté dans la page pour détecter les changements DOM, vérification périodique avec debounce de 500ms
+
+**Alignement avec l'extension WCAG Color Contrast Checker** :
+- Analyse du code minifié de l'extension WCAG pour comprendre la logique exacte
+- Filtrage des éléments identique (exclusion des conteneurs, mêmes tags exclus)
+- Comptage des éléments cachés avant les filtres (comme l'extension)
+- Affichage consolidé : une seule section "Visible elements" avec éléments textuels et non-textuels, un seul compteur pour les éléments cachés
+- Correspondance des quantités détectées avec l'extension de référence
 
 ### 7. Points techniques importants
 
@@ -385,6 +426,10 @@ webext-dagnostic-flash-rgaa/
 - ✅ Visualisation interactive (navigation clavier)
 - ✅ Cleanup automatique à la fermeture DevTools
 - ✅ Gestion des éléments masqués
+- ✅ Analyse automatique des contrastes WCAG (1.4.3, 1.4.6, 1.4.11)
+- ✅ Mise en évidence interactive des éléments avec problèmes de contraste
+- ✅ Auto-refresh des contrastes sur changement du DOM (MutationObserver)
+- ✅ Affichage automatique du titre et H1 de la page
 
 ---
 
@@ -425,6 +470,36 @@ Ces IDs permettent de mettre à jour le contenu dynamiquement si nécessaire.
 
 ---
 
+## 🐛 Corrections importantes effectuées
+
+### Corrections de bugs
+
+1. **Compteur "total tests"** : Fix du bug où le compteur restait à 1 quand un test revenait à "non-testé" (correction dans `updateTestStatus`)
+
+2. **Erreurs `[object Object]`** : Amélioration de l'extraction des messages d'erreur depuis les objets `isException` (utilisation de `value`, `description`, `message`, `toString()`)
+
+3. **Erreurs de syntaxe regex** : Correction des patterns regex incomplets dans les fonctions `rgbToHex` injectées (ajout de parenthèses manquantes)
+
+4. **Gestion des guillemets spéciaux** : Remplacement des guillemets typographiques dans les regex par des classes Unicode pour éviter les erreurs de parsing
+
+5. **Normalisation des espaces** : Utilisation de `String.fromCharCode` et `split/join` au lieu de regex pour éviter les problèmes d'échappement dans les scripts injectés
+
+6. **Filtrage des conteneurs** : Exclusion systématique de tous les conteneurs génériques (`div`, `section`, etc.) pour aligner avec l'extension WCAG
+
+7. **Comptage des éléments cachés** : Correction pour compter TOUS les éléments cachés avant les filtres, exactement comme l'extension WCAG
+
+8. **Mise en évidence précise** : Implémentation du parcours inverse du DOM pour prioriser les éléments les plus spécifiques (texte) plutôt que leurs conteneurs
+
+### Alignements avec l'extension WCAG Color Contrast Checker
+
+- Analyse du code minifié de l'extension pour comprendre la logique exacte
+- Filtrage identique des éléments (tags exclus, conteneurs exclus)
+- Comptage des éléments cachés identique (avant filtres)
+- Structure d'affichage alignée : une section "Visible elements" consolidée + compteur cachés
+- Quantités détectées correspondantes
+
+---
+
 ## 🚀 Prochaines étapes possibles
 
 1. **Fonctionnalités d'assistance** : Ajouter des outils pour aider l'utilisateur à valider certains tests manuels
@@ -433,6 +508,7 @@ Ces IDs permettent de mettre à jour le contenu dynamiquement si nécessaire.
 4. **Améliorations UX** : Améliorer les visualisations, animations, feedback utilisateur
 5. **Export des résultats** : Permettre d'exporter un rapport des tests effectués
 6. **Persistance** : Sauvegarder les résultats entre sessions
+7. **Optimisation performance** : Améliorer les performances de l'analyse des contrastes sur les grandes pages
 
 ---
 

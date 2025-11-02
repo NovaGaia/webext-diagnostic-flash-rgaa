@@ -60,7 +60,7 @@ const translations = {
     // Test: Two navigation means
     testTwoNavigationMeansName: 'Deux moyens de navigation sont présents',
     testTwoNavigationMeansDesc: 'Vérifiez manuellement que le site propose au moins deux moyens de navigation différents (menu, plan du site, moteur de recherche, fil d\'Ariane, etc.)',
-    testTwoNavigationMeansInfo: 'ℹ️ Test à valider manuellement',
+    testTwoNavigationMeansInfo: 'ℹ️ Test à valider manuellement. Pour savoir comment contrôler, consulter la documentation',
     testTwoNavigationMeansNameForStats: 'Deux moyens de navigation sont présents',
     
     // Test: Downloadable files
@@ -85,13 +85,13 @@ const translations = {
     // Test: Animations
     testAnimationsName: 'Les animations, clignotements et sons sont contrôlables',
     testAnimationsDesc: 'Vérification que les animations et sons peuvent être contrôlés par l\'utilisateur',
-    testAnimationsInfo: 'ℹ️ Test à valider manuellement',
+    testAnimationsInfo: 'ℹ️ Test à valider manuellement. Pour savoir comment contrôler, consulter la documentation',
     testAnimationsNameForStats: 'Les animations, clignotements et sons sont contrôlables',
     
     // Test: Titre de page
     testPageTitleName: 'Le titre de la page est unique et pertinent',
     testPageTitleDesc: 'Vérification que le titre de la page affiché dans l\'onglet du navigateur est unique et pertinent',
-    testPageTitleInfo: 'ℹ️ Test à valider manuellement',
+    testPageTitleInfo: 'ℹ️ Test à valider manuellement. Pour savoir comment contrôler, consulter la documentation',
     testPageTitleNameForStats: 'Le titre de la page est unique et pertinent',
     testPageTitleLabel: 'Title:',
     testPageTitleH1Label: 'H1:',
@@ -107,13 +107,13 @@ const translations = {
     // Test: Champs de formulaire
     testFormFieldsName: 'Chaque champ de formulaire est clairement associé à son intitulé. Les champs et les formats obligatoires sont indiqués',
     testFormFieldsDesc: 'Vérification que les intitulés des champs sont correctement associés et que les champs obligatoires sont indiqués',
-    testFormFieldsInfo: 'ℹ️ Test à valider manuellement',
+    testFormFieldsInfo: 'ℹ️ Test à valider manuellement. Pour savoir comment contrôler, consulter la documentation',
     testFormFieldsNameForStats: 'Chaque champ de formulaire est clairement associé à son intitulé. Les champs et les formats obligatoires sont indiqués',
     
     // Test: Informations fichiers téléchargement
     testDownloadInfoName: 'Les informations relatives aux fichiers proposés en téléchargement sont indiqués',
     testDownloadInfoDesc: 'Vérification que le format, la taille, la langue et le nom des fichiers téléchargeables sont indiqués',
-    testDownloadInfoInfo: 'ℹ️ Test à valider manuellement',
+    testDownloadInfoInfo: 'ℹ️ Test à valider manuellement. Pour savoir comment contrôler, consulter la documentation',
     testDownloadInfoNameForStats: 'Les informations relatives aux fichiers proposés en téléchargement sont indiqués',
     
     // Validation
@@ -203,7 +203,7 @@ const translations = {
     // Test: Two navigation means
     testTwoNavigationMeansName: 'Two navigation means are present',
     testTwoNavigationMeansDesc: 'Manually verify that the site offers at least two different navigation means (menu, sitemap, search engine, breadcrumb, etc.)',
-    testTwoNavigationMeansInfo: 'ℹ️ Test to be manually validated',
+    testTwoNavigationMeansInfo: 'ℹ️ Test to be manually validated. To know how to check, consult the documentation',
     
     // Test: Downloadable files
     testDownloadableFilesName: 'Office files downloadable from the site are provided in an open format and are accessible',
@@ -258,7 +258,7 @@ const translations = {
     // Test: Page title
     testPageTitleName: 'The page title is unique and relevant',
     testPageTitleDesc: 'Verification that the page title displayed in the browser tab is unique and relevant',
-    testPageTitleInfo: 'ℹ️ Test to be manually validated',
+    testPageTitleInfo: 'ℹ️ Test to be manually validated. To know how to check, consult the documentation',
     testPageTitleNameForStats: 'The page title is unique and relevant',
     testPageTitleLabel: 'Title:',
     testPageTitleH1Label: 'H1:',
