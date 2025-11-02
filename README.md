@@ -1,101 +1,106 @@
-# webext-dagnostic-flash-rgaa
+# Diagnostic Flash RGAA - Extension Navigateur
 
-Une extension navigateur pour réaliser les diagnostics flash d'accessibilité RGAA.
+Extension Chrome et Firefox pour réaliser les diagnostics flash d'accessibilité selon le référentiel RGAA.
 
-## 🚀 Installation pour le développement
+## Installation
 
-### Prérequis
-- Chrome ou Firefox (version récente)
-- Node.js (optionnel, pour la gestion du projet)
+### Développement
 
-### Installation dans Chrome
+1. Cloner le dépôt
+2. Charger l'extension non empaquetée dans Chrome/Firefox :
+   - **Chrome** : `chrome://extensions/` → Mode développeur → Charger l'extension non empaquetée
+   - **Firefox** : `about:debugging` → Ce Firefox → Charger un module complémentaire temporaire
 
-1. Ouvrez Chrome et allez dans `chrome://extensions/`
-2. Activez le "Mode développeur" (en haut à droite)
-3. Cliquez sur "Charger l'extension non empaquetée"
-4. Sélectionnez le dossier du projet
-5. L'extension devrait maintenant apparaître dans la liste
+### Production
 
-### Installation dans Firefox
-
-1. Ouvrez Firefox et allez dans `about:debugging`
-2. Cliquez sur "Ce Firefox" dans le menu de gauche
-3. Cliquez sur "Charger un module complémentaire temporaire"
-4. Naviguez jusqu'au dossier du projet et sélectionnez le fichier `manifest.json`
-5. L'extension devrait maintenant être chargée
-
-### Utilisation
-
-1. Ouvrez n'importe quelle page web
-2. Ouvrez les DevTools (F12 ou Cmd+Option+I / Ctrl+Shift+I)
-3. Vous devriez voir un nouvel onglet "Diagnostic Flash RGAA" dans les DevTools
-4. Cliquez dessus pour voir le panneau de l'extension
-
-## 📁 Structure du projet
-
-```
-.
-├── manifest.json          # Configuration de l'extension (Manifest V3)
-├── background.js          # Service worker de l'extension
-├── devtools.html          # Point d'entrée pour les DevTools
-├── devtools.js            # Script de création du panneau DevTools
-├── panel.html             # Interface du panneau DevTools
-├── panel.js               # Logique du panneau DevTools
-├── icons/                 # Icônes de l'extension (à créer)
-└── README.md              # Ce fichier
-```
-
-## 🎨 Création des icônes
-
-Les icônes sont requises pour que l'extension fonctionne correctement. Deux options :
-
-### Option 1 : Utiliser le manifest sans icônes (pour tester rapidement)
-
-Renommez temporairement les fichiers :
-```bash
-mv manifest.json manifest-with-icons.json
-mv manifest-no-icons.json manifest.json
-```
-
-### Option 2 : Générer des icônes
-
-1. **Avec ImageMagick** (si installé) :
-   ```bash
-   npm run generate-icons
-   ```
-
-2. **Manuellement** : Créez des images PNG de :
-   - `icon-16.png` (16x16 pixels)
-   - `icon-48.png` (48x48 pixels)
-   - `icon-128.png` (128x128 pixels)
-   
-   Placez-les dans le dossier `icons/`
-
-## 🔧 Développement
-
-Le projet utilise JavaScript vanilla et est compatible avec Manifest V3, ce qui permet un fonctionnement sur Chrome et Firefox.
-
-### Scripts disponibles
+Générer le package :
 
 ```bash
-# Créer un package de l'extension
 npm run package
 ```
 
-## 📝 Notes
+Cela créera un fichier `extension.zip` contenant l'extension prête à être publiée.
 
-- L'extension utilise Manifest V3 pour la compatibilité avec Chrome et Firefox
-- Le panneau DevTools permet d'analyser la page courante
-- Les futures fonctionnalités d'analyse seront implémentées dans `panel.js`
+## Génération des icônes
 
-## 🐛 Dépannage
+Générer les icônes depuis un fichier SVG source :
 
-Si l'extension ne s'affiche pas dans les DevTools :
-1. Vérifiez la console pour les erreurs (Console des DevTools)
-2. Assurez-vous que les fichiers sont correctement chargés
-3. Rechargez l'extension dans `chrome://extensions/` ou `about:debugging`
-4. Vérifiez que les icônes existent (ou commentez-les dans le manifest)
+```bash
+npm run generate-icons
+```
 
-## 📄 Licence
+## Versioning
 
-Voir le fichier LICENSE pour plus d'informations.
+La version de l'extension est gérée dans `manifest.json` et `package.json`. La version s'affiche automatiquement dans l'interface du panneau DevTools.
+
+### Mise à jour de la version
+
+Pour mettre à jour la version, modifier le champ `version` dans :
+- `manifest.json`
+- `package.json`
+
+Le format utilisé est le [Semantic Versioning](https://semver.org/) : `MAJOR.MINOR.PATCH`
+
+Exemples :
+- `1.0.0` : Version initiale
+- `1.1.0` : Nouvelle fonctionnalité (minor)
+- `1.1.1` : Correction de bug (patch)
+- `2.0.0` : Changement majeur (major)
+
+## Structure du projet
+
+```
+.
+├── manifest.json          # Manifest de l'extension (Manifest V3)
+├── package.json          # Configuration Node.js et scripts
+├── background.js         # Service worker (background)
+├── devtools.html         # Page d'entrée DevTools
+├── devtools.js           # Création du panneau DevTools
+├── panel.html            # Interface du panneau DevTools
+├── panel.js              # Orchestration principale
+├── utils/                # Utilitaires
+│   ├── i18n.js          # Système de traduction
+│   ├── ui.js            # Fonctions UI
+│   ├── stats.js         # Gestion des statistiques
+│   └── cleanup.js       # Nettoyage des visualisations
+└── tests/               # Tests d'accessibilité
+    ├── navigation/      # Tests de navigation
+    ├── langage/        # Tests de langage & interface
+    └── structuration/  # Tests de structuration
+```
+
+## Tests d'accessibilité
+
+L'extension vérifie plusieurs critères d'accessibilité :
+
+### Navigation & utilisation
+- Le site est optimisé pour toutes les tailles d'écran
+- La navigation et l'utilisation du site peuvent s'effectuer entièrement au clavier
+- Deux moyens de navigation sont présents
+- Les fichiers bureautiques téléchargeables sont proposés dans un format ouvert
+
+### Langage & interface
+- Les contrastes sont suffisants (beta)
+- Aucune information n'est véhiculée uniquement par la couleur
+- Les images, les vidéos et les fichiers audio ont une alternative textuelle
+- La langue principale du site est bien définie
+- Les liens sont explicites
+- Le contenu reste lisible à 200% de la taille par défaut
+- Les animations, clignotements et sons sont contrôlables
+
+### Structuration de l'information
+- Le titre de la page est unique et pertinent
+- La hiérarchie des titres est complète et cohérente (beta)
+- Chaque champ de formulaire est clairement associé à son intitulé
+- Les informations relatives aux fichiers proposés en téléchargement sont indiquées
+
+## Utilisation
+
+1. Ouvrir les DevTools (F12)
+2. Aller dans l'onglet "Diagnostic Flash RGAA"
+3. Les tests s'exécutent automatiquement au chargement
+4. Valider manuellement chaque test selon les critères RGAA
+
+## Licence
+
+MIT

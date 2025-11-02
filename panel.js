@@ -151,9 +151,28 @@ function initTranslations() {
   }
 }
 
+// Initialiser l'affichage de la version
+function initVersion() {
+  try {
+    const manifest = chrome.runtime.getManifest();
+    const version = manifest.version || '0.0.0';
+    const versionElement = document.getElementById('version-number');
+    if (versionElement) {
+      versionElement.textContent = version;
+    }
+  } catch (error) {
+    console.error('Erreur lors du chargement de la version:', error);
+    const versionElement = document.getElementById('version-number');
+    if (versionElement) {
+      versionElement.textContent = '?';
+    }
+  }
+}
+
 // Initialisation
 initTranslations();
 initCategories();
 initPopinEvents(); // Initialiser la popin
+initVersion(); // Afficher la version
 initTests(); // Lancer les tests automatiquement
 console.log(t('panelInitialized'));
