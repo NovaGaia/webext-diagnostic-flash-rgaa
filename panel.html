@@ -752,6 +752,190 @@
       color: #666;
       font-size: 11px;
     }
+    
+    /* Analyse de la hiérarchie des titres */
+    .headings-hierarchy-analysis {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .headings-hierarchy-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .headings-hierarchy-section {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .headings-hierarchy-section-title {
+      margin: 0;
+      padding: 10px 15px;
+      background: #f5f5f5;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .headings-tree,
+    .landmarks-tree {
+      padding: 10px 15px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      background: #fafafa;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .headings-tree-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 4px 0;
+      border-left: 2px solid transparent;
+      transition: background-color 0.2s;
+    }
+    
+    .headings-tree-item.headings-tree-error {
+      background-color: rgba(244, 67, 54, 0.15) !important;
+      border-left-color: #f44336 !important;
+      padding-left: 8px;
+      margin-left: -8px;
+    }
+    
+    .headings-tree-item.headings-tree-error .headings-tree-level,
+    .headings-tree-item.headings-tree-error .headings-tree-text {
+      color: #d32f2f;
+      font-weight: 600;
+    }
+    
+    .headings-tree-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .headings-tree-item.headings-tree-error:hover {
+      background-color: rgba(244, 67, 54, 0.25) !important;
+    }
+    
+    .headings-tree-level {
+      display: inline-block;
+      min-width: 20px;
+      font-weight: 600;
+      color: #1976d2;
+    }
+    
+    .headings-tree-text {
+      flex: 1;
+      color: #333;
+      word-break: break-word;
+    }
+    
+    .headings-tree-empty,
+    .landmarks-tree-empty {
+      padding: 20px;
+      text-align: center;
+      color: #999;
+      font-style: italic;
+    }
+    
+    .landmarks-tree-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-left: 2px solid transparent;
+      transition: background-color 0.2s;
+    }
+    
+    .landmarks-tree-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .landmark-nested {
+      border-left-color: #ff9800;
+      padding-left: 8px;
+    }
+    
+    .landmark-error {
+      background-color: rgba(244, 67, 54, 0.15) !important;
+      border-left-color: #f44336 !important;
+      padding-left: 8px;
+    }
+    
+    .landmark-error .landmarks-tree-label,
+    .landmark-error .landmarks-tree-role {
+      color: #d32f2f;
+      font-weight: 600;
+    }
+    
+    .landmarks-tree-label {
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .landmarks-tree-role {
+      color: #666;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    /* Headers des sections avec boutons toggle */
+    .headings-hierarchy-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .headings-hierarchy-section-title {
+      margin: 0;
+      flex: 1;
+    }
+    
+    .button-toggle-headings,
+    .button-toggle-landmarks {
+      background: transparent;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 28px;
+    }
+    
+    .button-toggle-headings:hover,
+    .button-toggle-landmarks:hover {
+      background-color: #f5f5f5;
+      border-color: #999;
+    }
+    
+    .button-toggle-headings.active,
+    .button-toggle-landmarks.active {
+      background-color: #1976d2;
+      border-color: #1976d2;
+      color: white;
+    }
+    
+    .button-toggle-headings.active .button-toggle-icon,
+    .button-toggle-landmarks.active .button-toggle-icon {
+      color: white;
+    }
+    
+    .button-toggle-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -864,6 +1048,8 @@
 
   <!-- Tests Structuration de l'information -->
   <script src="tests/structuration/page-title.js"></script>
+  <script src="tests/structuration/headings-hierarchy/analyze.js"></script>
+  <script src="tests/structuration/headings-hierarchy/display.js"></script>
   <script src="tests/structuration/headings-hierarchy.js"></script>
   <script src="tests/structuration/form-fields.js"></script>
   <script src="tests/structuration/download-info.js"></script>

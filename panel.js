@@ -61,7 +61,22 @@ function resetAllTests() {
     item.className = 'test-item';
   });
   
-  // Réinitialiser les boutons toggle
+  // Réinitialiser les boutons toggle (clavier, titres, landmarks)
+  if (typeof window.headingsVisualizationActive !== 'undefined') {
+    window.headingsVisualizationActive = false;
+  }
+  if (typeof window.landmarksVisualizationActive !== 'undefined') {
+    window.landmarksVisualizationActive = false;
+  }
+  
+  document.querySelectorAll('.button-toggle-headings, .button-toggle-landmarks').forEach(btn => {
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active');
+      const icon = btn.querySelector('.button-toggle-icon');
+      if (icon) icon.textContent = '👁️';
+    }
+  });
+  
   document.querySelectorAll('.button-small').forEach(btn => {
     if (btn.textContent.includes('Activer') || btn.textContent.includes('Deactivate')) {
       btn.textContent = t('testKeyboardNavigationToggle');

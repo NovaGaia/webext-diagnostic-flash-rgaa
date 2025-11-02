@@ -16,6 +16,7 @@ function testHeadingsHierarchy() {
       <div class="auto-check" id="test-${testId}-info">
         ${t('testHeadingsHierarchyInfo')}
       </div>
+      <button class="button-small" id="test-${testId}-analyze" style="margin-top: 10px;">${t('testHeadingsHierarchyAnalyze')}</button>
     </div>
     <div class="test-actions">
       <div class="test-validation">
@@ -40,6 +41,33 @@ function testHeadingsHierarchy() {
   
   // Initialiser le bloc de documentation
   initDocumentationBlocks();
+  
+  // Écouteur pour le bouton d'analyse
+  const analyzeBtn = document.getElementById(`test-${testId}-analyze`);
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', () => {
+      analyzeBtn.textContent = t('testHeadingsHierarchyAnalyzing');
+      analyzeBtn.disabled = true;
+      
+      analyzeHeadingsHierarchy((results) => {
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = t('testHeadingsHierarchyAnalyze');
+        
+        if (results.error) {
+          const infoElement = document.getElementById(`test-${testId}-info`);
+          if (infoElement) {
+            const errorMessage = typeof results.error === 'string' 
+              ? results.error 
+              : (results.error?.value || results.error?.description || results.error?.message || String(results.error));
+            infoElement.textContent = '✗ ' + t('errorPageAnalysis') + ': ' + errorMessage;
+            infoElement.className = 'auto-check failed';
+          }
+        } else {
+          displayHeadingsHierarchy(testId, results);
+        }
+      });
+    });
+  }
   
   // Écouteurs pour les options de validation
   const validationInputs = document.querySelectorAll(`input[name="test-${testId}-validation"]`);

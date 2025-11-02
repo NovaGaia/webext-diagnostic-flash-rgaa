@@ -28,6 +28,40 @@ function cleanupAllVisualizations() {
         el.removeAttribute('data-contrast-highlight');
       });
       
+      // Nettoyer la visualisation des titres
+      const headingsOverlay = document.getElementById('rgaa-headings-overlay');
+      if (headingsOverlay) headingsOverlay.remove();
+      
+      const headings = document.querySelectorAll('[data-rgaa-heading-border]');
+      headings.forEach(h => {
+        h.style.outline = '';
+        h.style.outlineOffset = '';
+        h.removeAttribute('data-rgaa-heading-border');
+      });
+      
+      if (window._rgaaHeadingsUpdate) {
+        window.removeEventListener('scroll', window._rgaaHeadingsUpdate, true);
+        window.removeEventListener('resize', window._rgaaHeadingsUpdate);
+        delete window._rgaaHeadingsUpdate;
+      }
+      
+      // Nettoyer la visualisation des landmarks
+      const landmarksOverlay = document.getElementById('rgaa-landmarks-overlay');
+      if (landmarksOverlay) landmarksOverlay.remove();
+      
+      const landmarks = document.querySelectorAll('[data-rgaa-landmark-border]');
+      landmarks.forEach(l => {
+        l.style.outline = '';
+        l.style.outlineOffset = '';
+        l.removeAttribute('data-rgaa-landmark-border');
+      });
+      
+      if (window._rgaaLandmarksUpdate) {
+        window.removeEventListener('scroll', window._rgaaLandmarksUpdate, true);
+        window.removeEventListener('resize', window._rgaaLandmarksUpdate);
+        delete window._rgaaLandmarksUpdate;
+      }
+      
       return { cleaned: true };
     })()
   `, (result, isException) => {

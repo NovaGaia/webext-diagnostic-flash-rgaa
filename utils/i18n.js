@@ -146,8 +146,12 @@ const translations = {
     // Test: Hiérarchie des titres
     testHeadingsHierarchyName: 'La hiérarchie des titres est complète et cohérente',
     testHeadingsHierarchyDesc: 'Vérification qu\'il y a au moins un titre de niveau 1 et que l\'arbre des titres est logique',
-    testHeadingsHierarchyInfo: 'ℹ️ Utilisez l\'extension HeadingsMap pour vérifier la hiérarchie',
+    testHeadingsHierarchyInfo: 'ℹ️ Cliquez sur "Analyser la hiérarchie" pour voir l\'arborescence des titres et des landmarks',
+    testHeadingsHierarchyAnalyze: 'Analyser la hiérarchie',
+    testHeadingsHierarchyAnalyzing: 'Analyse en cours...',
     testHeadingsHierarchyNameForStats: 'La hiérarchie des titres est complète et cohérente',
+    toggleHeadingsVisualization: 'Afficher/masquer les titres sur la page',
+    toggleLandmarksVisualization: 'Afficher/masquer les landmarks sur la page',
     
     // Test: Champs de formulaire
     testFormFieldsName: 'Chaque champ de formulaire est clairement associé à son intitulé. Les champs et les formats obligatoires sont indiqués',
@@ -293,6 +297,16 @@ const translations = {
     testTextResizeInstructions: 'To test resizing to 200%:\\n\\n1. Open browser settings\\n2. Look for "Font size" or "Zoom"\\n3. Set size to 200% or use Ctrl/Cmd + to zoom to 200%\\n4. Visually verify that content remains readable and usable\\n5. Check the validation box in the RGAA Flash Diagnostic panel',
     testTextResizeInfo: 'ℹ️ Test to be manually validated. To know how to check, consult the documentation',
     testTextResizeNameForStats: 'Content remains readable when font size is increased to 200% of default size in browser',
+    
+    // Test: Headings hierarchy
+    testHeadingsHierarchyName: 'The heading hierarchy is complete and consistent',
+    testHeadingsHierarchyDesc: 'Verification that there is at least one level 1 heading and that the heading tree is logical',
+    testHeadingsHierarchyInfo: 'ℹ️ Click on "Analyze hierarchy" to see the headings and landmarks tree',
+    testHeadingsHierarchyAnalyze: 'Analyze hierarchy',
+    testHeadingsHierarchyAnalyzing: 'Analyzing...',
+    testHeadingsHierarchyNameForStats: 'The heading hierarchy is complete and consistent',
+    toggleHeadingsVisualization: 'Show/hide headings on the page',
+    toggleLandmarksVisualization: 'Show/hide landmarks on the page',
     
     // Validation
     validationPassed: '✓ Passed',
