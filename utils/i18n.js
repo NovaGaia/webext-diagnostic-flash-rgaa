@@ -15,6 +15,7 @@ const translations = {
     statsTotal: 'Total',
     statsPassed: 'Réussis',
     statsFailed: 'Échoués',
+    statsNotApplicable: 'Non applicables',
     statsReset: 'Réinitialiser tous les tests',
     
     // Messages généraux
@@ -169,6 +170,7 @@ const translations = {
     validationPassed: '✓ Réussi',
     validationFailed: '✗ Échoué',
     validationNotTested: 'Non testé',
+    validationNotApplicable: 'Non applicable',
     
     // Statuts
     statusPending: 'En attente de validation',
@@ -220,6 +222,7 @@ const translations = {
     statsTotal: 'Total',
     statsPassed: 'Passed',
     statsFailed: 'Failed',
+    statsNotApplicable: 'Not applicable',
     statsReset: 'Reset all tests',
     
     // Messages généraux
@@ -312,6 +315,7 @@ const translations = {
     validationPassed: '✓ Passed',
     validationFailed: '✗ Failed',
     validationNotTested: 'Not tested',
+    validationNotApplicable: 'Not applicable',
     
     // Statuts
     statusPending: 'Pending validation',

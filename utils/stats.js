@@ -24,6 +24,7 @@ function updateStats() {
   let total = 0;
   let passed = 0;
   let failed = 0;
+  let notApplicable = 0;
   
   Object.keys(categories).forEach(categoryId => {
     const categoryTests = categories[categoryId].tests;
@@ -33,6 +34,8 @@ function updateStats() {
         passed++;
       } else if (test.status === 'failed') {
         failed++;
+      } else if (test.status === 'not-applicable') {
+        notApplicable++;
       }
       // Les tests avec status 'warning' sont comptés dans total mais pas dans passed/failed
     });
@@ -41,6 +44,7 @@ function updateStats() {
   const totalEl = document.getElementById('totalTests');
   const passedEl = document.getElementById('passedTests');
   const failedEl = document.getElementById('failedTests');
+  const notApplicableEl = document.getElementById('notApplicableTests');
   
   if (totalEl) {
     totalEl.textContent = total;
@@ -56,6 +60,9 @@ function updateStats() {
     failedEl.textContent = failed;
   } else {
     console.warn(t('warningFailedTestsNotFound'));
+  }
+  if (notApplicableEl) {
+    notApplicableEl.textContent = notApplicable;
   }
 }
 

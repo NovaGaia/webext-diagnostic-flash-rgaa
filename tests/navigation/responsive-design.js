@@ -39,6 +39,10 @@ function testResponsiveDesign() {
           <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-tested" value="not-tested" checked>
           <label for="test-${testId}-not-tested">${t('validationNotTested')}</label>
         </div>
+        <div class="validation-option">
+          <input type="radio" name="test-${testId}-validation" id="test-${testId}-not-applicable" value="not-applicable">
+          <label for="test-${testId}-not-applicable">${t('validationNotApplicable')}</label>
+        </div>
       </div>
     </div>
     ${createDocumentationBlock(testId, false)}
@@ -214,6 +218,10 @@ function updateTestStatus(testId, validationValue) {
     testItem.className = 'test-item failed';
     status = 'failed';
     resultsMessage = t('statusFailed');
+  } else if (validationValue === 'not-applicable') {
+    testItem.className = 'test-item not-applicable';
+    status = 'not-applicable';
+    resultsMessage = t('validationNotApplicable');
   } else {
     // not-tested
     testItem.className = 'test-item';
