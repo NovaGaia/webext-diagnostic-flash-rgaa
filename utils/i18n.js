@@ -17,6 +17,7 @@ const translations = {
     statsFailed: 'Échoués',
     statsNotApplicable: 'Non applicables',
     statsScore: 'Score',
+    statsDistribution: 'Répartition des résultats',
     statsReset: 'Réinitialiser tous les tests',
     
     // Messages généraux
@@ -225,6 +226,7 @@ const translations = {
     statsFailed: 'Failed',
     statsNotApplicable: 'Not applicable',
     statsScore: 'Score',
+    statsDistribution: 'Results distribution',
     statsReset: 'Reset all tests',
     
     // Messages généraux
