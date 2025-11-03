@@ -5,17 +5,20 @@ const categories = {
   navigation: {
     name: t('categoryNavigation'),
     icon: '🧭',
-    tests: []
+    tests: [],
+    totalTests: 4 // Nombre total de tests dans cette catégorie
   },
   langage: {
     name: t('categoryLangage'),
     icon: '🌐',
-    tests: []
+    tests: [],
+    totalTests: 7 // Nombre total de tests dans cette catégorie
   },
   structuration: {
     name: t('categoryStructuration'),
     icon: '📋',
-    tests: []
+    tests: [],
+    totalTests: 4 // Nombre total de tests dans cette catégorie
   }
 };
 
@@ -95,6 +98,9 @@ function updateStats() {
   
   // Mettre à jour le diagramme circulaire
   updatePieChart(passed, failed, notApplicable);
+  
+  // Mettre à jour les compteurs de progression par catégorie
+  updateCategoryProgress();
 }
 
 // Mettre à jour le diagramme circulaire
@@ -207,6 +213,56 @@ function updatePieChart(passed, failed, notApplicable) {
     legendItem.appendChild(colorBox);
     legendItem.appendChild(label);
     legend.appendChild(legendItem);
+  });
+}
+
+// Mettre à jour les compteurs de progression par catégorie
+function updateCategoryProgress() {
+  Object.keys(categories).forEach(categoryId => {
+    const category = categories[categoryId];
+    const categoryTests = category.tests;
+    
+    // Compter les tests par statut dans cette catégorie
+    let passed = 0;
+    let failed = 0;
+    let notApplicable = 0;
+    
+    categoryTests.forEach(test => {
+      if (test.status === 'passed') {
+        passed++;
+      } else if (test.status === 'failed') {
+        failed++;
+      } else if (test.status === 'not-applicable') {
+        notApplicable++;
+      }
+    });
+    
+    // Calculer le total validé (réussis + échoués + non applicables)
+    const validated = passed + failed + notApplicable;
+    const total = category.totalTests;
+    
+    // Trouver le header de la catégorie
+    const header = document.querySelector(`[data-category-toggle="${categoryId}"]`);
+    if (!header) return;
+    
+    // Trouver ou créer l'élément de compteur
+    let counterEl = header.querySelector('.category-progress-counter');
+    if (!counterEl) {
+      counterEl = document.createElement('span');
+      counterEl.className = 'category-progress-counter';
+      // Insérer après le titre
+      const titleSpan = header.querySelector('span[data-i18n]');
+      if (titleSpan) {
+        titleSpan.parentNode.insertBefore(counterEl, titleSpan.nextSibling);
+      }
+    }
+    
+    // Mettre à jour le compteur avec le format : (validé / total)
+    counterEl.textContent = `(${validated} / ${total})`;
+    counterEl.style.marginLeft = '8px';
+    counterEl.style.fontSize = '12px';
+    counterEl.style.color = validated === total ? '#4caf50' : '#666';
+    counterEl.style.fontWeight = 'normal';
   });
 }
 
