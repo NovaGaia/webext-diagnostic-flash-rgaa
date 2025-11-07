@@ -19,13 +19,19 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install zip
         run: sudo apt-get update && sudo apt-get install -y zip
@@ -51,10 +57,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Package Chrome
-        run: npm run package:chrome
+        run: pnpm run package:chrome
 
       - name: Package Firefox
-        run: npm run package:firefox
+        run: pnpm run package:firefox
 
       - name: Upload Chrome Package (Artifact)
         uses: actions/upload-artifact@v4
