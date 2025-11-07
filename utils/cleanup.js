@@ -86,6 +86,23 @@ function cleanupAllVisualizations() {
         delete window._rgaaFormFieldsUpdate;
       }
       
+      // Nettoyer la visualisation des alternatives textuelles
+      const mediaAlternativesOverlay = document.getElementById('rgaa-media-alternatives-overlay');
+      if (mediaAlternativesOverlay) mediaAlternativesOverlay.remove();
+      
+      const mediaElements = document.querySelectorAll('[data-rgaa-media-border]');
+      mediaElements.forEach(el => {
+        el.style.outline = '';
+        el.style.outlineOffset = '';
+        el.removeAttribute('data-rgaa-media-border');
+      });
+      
+      if (window._rgaaMediaAlternativesUpdate) {
+        window.removeEventListener('scroll', window._rgaaMediaAlternativesUpdate, true);
+        window.removeEventListener('resize', window._rgaaMediaAlternativesUpdate);
+        delete window._rgaaMediaAlternativesUpdate;
+      }
+      
       return { cleaned: true };
     })()
   `, (result, isException) => {
