@@ -213,38 +213,82 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 **Fonctionnalité ajoutée** : Bouton d'analyse "Analyser les alternatives textuelles (beta)" qui détecte et affiche les alternatives textuelles des images, SVG, vidéos et audio.
 
 **Visualisation** :
-- **Bordure verte** si alternative présente
+- **Bordure verte** si alternative présente ou si élément décoratif
 - **Bordure rouge** si aucune alternative
 - **Bulle (tooltip)** au-dessus de l'élément avec :
-  - Le texte de l'alternative (limité à 100 caractères)
-  - La méthode utilisée (alt, aria-label, title, svg-title, etc.)
+  - Le texte de l'alternative (limité à 100 caractères) ou "Décoratif" pour les éléments décoratifs
+  - La méthode utilisée (alt, aria-label, aria-labelledby, title, svg-title, etc.)
 - **Indicateur "Pas d'alternative"** pour les éléments sans alternative
 
 **Détection des alternatives** :
-- Pour les images : `alt`, `aria-label`, `title`
-- Pour les SVG : `aria-label`, `title`, `<title>` dans le SVG, `role="img"` avec `aria-label`
-- Pour les vidéos/audio : `aria-label`, `title`
+- Pour les images : `alt`, `aria-labelledby`, `aria-label`, `title`
+- Pour les SVG : `aria-labelledby`, `aria-label`, `title`, `<title>` dans le SVG, `role="img"` avec `aria-label`
+- Pour les vidéos/audio : `aria-labelledby`, `aria-label`, `title`
+
+**Détection des éléments décoratifs** :
+- Éléments avec `role="presentation"` ou `role="none"` → considérés comme décoratifs (OK, pas besoin d'alternative)
+- Éléments avec `aria-hidden="true"` → considérés comme décoratifs (OK, pas besoin d'alternative)
+- Affichés avec bordure verte et bulle "Décoratif"
+
+**Gestion de `aria-labelledby`** :
+- Récupération du nom accessible de l'élément référencé selon les règles ARIA
+- Ordre de priorité : `aria-label` → `aria-labelledby` (récursif) → `alt` (images) → `textContent`
+- **Note importante** : `title` n'est PAS utilisé dans le calcul du nom accessible pour `aria-labelledby` (conforme aux spécifications ARIA)
 
 **Fonctionnalités techniques** :
 - Bulles positionnées avec `position: fixed` et `getBoundingClientRect()`
 - Mise à jour automatique au scroll et resize (debounce 10ms)
 - Ajustement automatique si la bulle dépasse les bords de l'écran
+- Fonction `getAccessibleName()` pour calculer le nom accessible selon les règles ARIA
 - Nettoyage intégré dans `cleanupAllVisualizations()`
 
 ### 10. Migration vers pnpm dans les workflows GitHub
 
-**Fichiers modifiés** : `.github/workflows/release.yml`, `.github/workflows/package.yml`, `.github/workflows/changesets.yml`
+**Fichiers modifiés** : `.github/workflows/release.yml`, `.github/workflows/package.yml`, `.github/workflows/changesets.yml`, `package.json`
 
 **Modifications** :
 - Ajout de l'étape "Setup pnpm" avec `pnpm/action-setup@v4`
 - Configuration de `setup-node` avec `cache: 'pnpm'`
 - Remplacement de `npm ci` par `pnpm install --frozen-lockfile`
 - Remplacement de toutes les commandes `npm run` par `pnpm run`
+- Création du script `version-all` dans `package.json` pour combiner `changeset version` et `sync-version.js`
+- Correction du workflow `changesets.yml` : suppression du déclenchement sur `pull_request` (uniquement `push` vers `main`)
+
+**Problèmes résolus** :
+- L'action `changesets/action` ne peut pas exécuter de commandes avec `&&` directement dans le champ `version`, d'où la création du script `version-all`
+- Le workflow se déclenchait sur `pull_request`, causant des erreurs de validation lors de la création de PR (branche de base invalide)
 
 **Bénéfices** :
 - Installation plus rapide grâce au cache pnpm
 - Utilisation cohérente avec le développement local (présence de `pnpm-lock.yaml`)
 - Meilleure gestion des dépendances avec pnpm
+- Workflow changesets fonctionnel avec création correcte des PRs de version
+
+### 11. Mise à jour proactive de la documentation par l'IA
+
+**Fichier créé** : `.cursor/rules`
+
+**Approche** : La mise à jour de la documentation (README.md et `.cursor/MEMOIRE_SESSION.md`) est maintenant faite de manière proactive par l'IA dans la conversation, après chaque modification validée par l'utilisateur.
+
+**Mécanisme mis en place** :
+- Fichier `.cursor/rules` contenant des instructions claires pour l'IA
+- Règle critique : après chaque modification validée, l'IA DOIT mettre à jour la documentation
+- Instructions détaillées sur ce qui doit être documenté et quand
+
+**Principe** :
+- Après chaque modification validée, l'IA met automatiquement à jour la mémoire avec :
+  - Les nouvelles fonctionnalités ajoutées
+  - Les corrections importantes apportées
+  - Les changements de comportement
+  - Les problèmes résolus
+  - Les détails techniques importants
+- Mise à jour dans la même réponse où les modifications sont faites
+- Sans attendre que l'utilisateur le demande explicitement
+
+**Avantages** :
+- Pas de scripts automatiques complexes : la mise à jour sémantique nécessite une compréhension du contexte
+- Documentation toujours à jour grâce aux règles dans `.cursor/rules`
+- Approche simple et efficace
 
 ---
 
@@ -778,7 +822,7 @@ Ces IDs permettent de mettre à jour le contenu dynamiquement si nécessaire.
 1. **Performance** : La visualisation clavier peut être lourde avec beaucoup d'éléments. Le debounce est crucial.
 2. **Accessibilité** : L'extension elle-même doit être accessible (utilise déjà `aria-label`, `aria-expanded`)
 3. **Compatibilité** : Fonctionne sur Chrome et Firefox (Manifest V3)
-4. **Versioning** : Utiliser `npm run changeset` avant chaque PR contenant des changements
+4. **Versioning** : Utiliser `pnpm run changeset` avant chaque PR contenant des changements
 5. **Packaging** : Les packages sont générés automatiquement lors des releases GitHub
 6. **Maintenance** : Structure modulaire facilite l'ajout de nouveaux tests
 7. **Traductions** : Tous les textes doivent passer par `t()` pour faciliter l'ajout de nouvelles langues
