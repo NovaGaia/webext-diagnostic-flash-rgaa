@@ -9,7 +9,7 @@ Nous utilisons Changesets pour gérer les versions de notre extension navigateur
 Quand vous faites une modification qui nécessite un changement de version :
 
 ```bash
-ppppnpm run changeset
+pnpm run changeset
 ```
 
 Cela vous demandera :
@@ -33,10 +33,10 @@ Cela vous demandera :
 
 ## Scripts disponibles
 
-- `ppppnpm run changeset` : Créer un nouveau changeset
-- `ppppnpm run version-packages` : Versionner les packages (fait automatiquement par GitHub Actions)
-- `ppppnpm run version` : Synchroniser la version entre package.json et manifest.json
-- `ppppnpm run version-all` : Versionner les packages ET synchroniser (utilisé par GitHub Actions)
+- `pnpm run changeset` : Créer un nouveau changeset
+- `pnpm run version-packages` : Versionner les packages (fait automatiquement par GitHub Actions)
+- `pnpm run version` : Synchroniser la version entre package.json et manifest.json
+- `pnpm run version-all` : Versionner les packages ET synchroniser (utilisé par GitHub Actions)
 
 ## Notes
 

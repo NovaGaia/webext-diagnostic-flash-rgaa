@@ -1,0 +1,43 @@
+# Règles pour l'IA Cursor - Extension Diagnostic Flash RGAA
+
+## Mise à jour proactive de la documentation
+
+**RÈGLE CRITIQUE** : Après chaque modification de code validée par l'utilisateur, tu DOIS mettre à jour la documentation de manière proactive :
+
+1. **`.cursor/MEMOIRE_SESSION.md`** : Ajouter une section ou mettre à jour une section existante avec :
+   - Les nouvelles fonctionnalités ajoutées
+   - Les corrections importantes apportées
+   - Les changements de comportement
+   - Les problèmes résolus
+   - Les détails techniques importants
+
+2. **README.md** : Mettre à jour si nécessaire :
+   - Nouvelles commandes ou scripts
+   - Changements dans les workflows
+   - Nouvelles fonctionnalités à documenter
+
+3. **Quand mettre à jour** :
+   - Immédiatement après que l'utilisateur accepte les changements
+   - Dans la même réponse où tu fais les modifications
+   - Sans attendre que l'utilisateur le demande
+
+4. **Ce qui doit être documenté** :
+   - Toutes les nouvelles fonctionnalités
+   - Toutes les corrections de bugs importantes
+   - Tous les changements de configuration (workflows, scripts, etc.)
+   - Tous les changements de comportement
+   - Les détails techniques importants (algorithmes, API utilisées, etc.)
+
+## Utilisation de pnpm
+
+- TOUJOURS utiliser `pnpm` au lieu de `npm`
+- Toutes les commandes doivent utiliser `pnpm run`
+- Les workflows GitHub utilisent `pnpm install --frozen-lockfile`
+
+## Structure du projet
+
+- Tests dans `tests/` organisés par catégorie (navigation, langage, structuration)
+- Utilitaires dans `utils/`
+- Scripts dans `scripts/`
+- Documentation principale : `.cursor/MEMOIRE_SESSION.md` (pour l'IA) et `README.md` (pour les développeurs)
+

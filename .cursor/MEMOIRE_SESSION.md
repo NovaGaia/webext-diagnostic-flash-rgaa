@@ -127,15 +127,15 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 - **Utilisation de pnpm** : Tous les workflows GitHub utilisent pnpm au lieu de npm
 
 **Scripts disponibles** :
-- `ppppnpm run changeset` : Créer un nouveau changeset
-- `ppppnpm run version-packages` : Versionner les packages (via Changesets)
-- `ppppnpm run version` : Synchroniser les versions
-- `ppppnpm run package:chrome` : Créer le package Chrome
-- `ppppnpm run package:firefox` : Créer le package Firefox
-- `ppppnpm run package` : Créer les deux packages
+- `pnpm run changeset` : Créer un nouveau changeset
+- `pnpm run version-packages` : Versionner les packages (via Changesets)
+- `pnpm run version` : Synchroniser les versions
+- `pnpm run package:chrome` : Créer le package Chrome
+- `pnpm run package:firefox` : Créer le package Firefox
+- `pnpm run package` : Créer les deux packages
 
 **Workflow de release** :
-1. Développement + création de changeset (`ppppnpm run changeset`)
+1. Développement + création de changeset (`pnpm run changeset`)
 2. PR avec changements + changeset → Merge dans `main`
 3. GitHub Actions crée automatiquement un PR "chore: version packages"
 4. Merge du PR de version → Création automatique :
@@ -213,22 +213,33 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 **Fonctionnalité ajoutée** : Bouton d'analyse "Analyser les alternatives textuelles (beta)" qui détecte et affiche les alternatives textuelles des images, SVG, vidéos et audio.
 
 **Visualisation** :
-- **Bordure verte** si alternative présente
+- **Bordure verte** si alternative présente ou si élément décoratif
 - **Bordure rouge** si aucune alternative
 - **Bulle (tooltip)** au-dessus de l'élément avec :
-  - Le texte de l'alternative (limité à 100 caractères)
-  - La méthode utilisée (alt, aria-label, title, svg-title, etc.)
+  - Le texte de l'alternative (limité à 100 caractères) ou "Décoratif" pour les éléments décoratifs
+  - La méthode utilisée (alt, aria-label, aria-labelledby, title, svg-title, etc.)
 - **Indicateur "Pas d'alternative"** pour les éléments sans alternative
 
 **Détection des alternatives** :
-- Pour les images : `alt`, `aria-label`, `title`
-- Pour les SVG : `aria-label`, `title`, `<title>` dans le SVG, `role="img"` avec `aria-label`
-- Pour les vidéos/audio : `aria-label`, `title`
+- Pour les images : `alt`, `aria-labelledby`, `aria-label`, `title`
+- Pour les SVG : `aria-labelledby`, `aria-label`, `title`, `<title>` dans le SVG, `role="img"` avec `aria-label`
+- Pour les vidéos/audio : `aria-labelledby`, `aria-label`, `title`
+
+**Détection des éléments décoratifs** :
+- Éléments avec `role="presentation"` ou `role="none"` → considérés comme décoratifs (OK, pas besoin d'alternative)
+- Éléments avec `aria-hidden="true"` → considérés comme décoratifs (OK, pas besoin d'alternative)
+- Affichés avec bordure verte et bulle "Décoratif"
+
+**Gestion de `aria-labelledby`** :
+- Récupération du nom accessible de l'élément référencé selon les règles ARIA
+- Ordre de priorité : `aria-label` → `aria-labelledby` (récursif) → `alt` (images) → `textContent`
+- **Note importante** : `title` n'est PAS utilisé dans le calcul du nom accessible pour `aria-labelledby` (conforme aux spécifications ARIA)
 
 **Fonctionnalités techniques** :
 - Bulles positionnées avec `position: fixed` et `getBoundingClientRect()`
 - Mise à jour automatique au scroll et resize (debounce 10ms)
 - Ajustement automatique si la bulle dépasse les bords de l'écran
+- Fonction `getAccessibleName()` pour calculer le nom accessible selon les règles ARIA
 - Nettoyage intégré dans `cleanupAllVisualizations()`
 
 ### 10. Migration vers pnpm dans les workflows GitHub
@@ -238,8 +249,8 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 **Modifications** :
 - Ajout de l'étape "Setup pnpm" avec `pnpm/action-setup@v4`
 - Configuration de `setup-node` avec `cache: 'pnpm'`
-- Remplacement de `pnpm install --frozen-lockfile` par `pnpm install --frozen-lockfile`
-- Remplacement de toutes les commandes `pppnpm run` par `ppppnpm run`
+- Remplacement de `npm ci` par `pnpm install --frozen-lockfile`
+- Remplacement de toutes les commandes `npm run` par `pnpm run`
 - Création du script `version-all` dans `package.json` pour combiner `changeset version` et `sync-version.js`
 - Correction du workflow `changesets.yml` : suppression du déclenchement sur `pull_request` (uniquement `push` vers `main`)
 
@@ -252,6 +263,32 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 - Utilisation cohérente avec le développement local (présence de `pnpm-lock.yaml`)
 - Meilleure gestion des dépendances avec pnpm
 - Workflow changesets fonctionnel avec création correcte des PRs de version
+
+### 11. Mise à jour proactive de la documentation par l'IA
+
+**Fichier créé** : `.cursor/rules`
+
+**Approche** : La mise à jour de la documentation (README.md et `.cursor/MEMOIRE_SESSION.md`) est maintenant faite de manière proactive par l'IA dans la conversation, après chaque modification validée par l'utilisateur.
+
+**Mécanisme mis en place** :
+- Fichier `.cursor/rules` contenant des instructions claires pour l'IA
+- Règle critique : après chaque modification validée, l'IA DOIT mettre à jour la documentation
+- Instructions détaillées sur ce qui doit être documenté et quand
+
+**Principe** :
+- Après chaque modification validée, l'IA met automatiquement à jour la mémoire avec :
+  - Les nouvelles fonctionnalités ajoutées
+  - Les corrections importantes apportées
+  - Les changements de comportement
+  - Les problèmes résolus
+  - Les détails techniques importants
+- Mise à jour dans la même réponse où les modifications sont faites
+- Sans attendre que l'utilisateur le demande explicitement
+
+**Avantages** :
+- Pas de scripts automatiques complexes : la mise à jour sémantique nécessite une compréhension du contexte
+- Documentation toujours à jour grâce aux règles dans `.cursor/rules`
+- Approche simple et efficace
 
 ---
 
