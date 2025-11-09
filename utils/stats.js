@@ -4,7 +4,9 @@
 // Utilisation d'icônes basées sur Heroicons (style outline, 24x24 viewBox)
 // Toutes les icônes ont le même viewBox pour garantir l'homogénéité
 
-function createScoreIcon(size = 24, color = '#1976d2') {
+// Fonctions d'icônes pour l'export SVG (retournent un groupe SVG)
+// Ces fonctions sont utilisées uniquement pour l'export, pas pour l'UI
+function createScoreIconForExport(size = 24, color = '#1976d2') {
   // Icône "Chart Bar" de Heroicons - représente les statistiques/score
   const iconGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -26,7 +28,7 @@ function createScoreIcon(size = 24, color = '#1976d2') {
   return iconGroup;
 }
 
-function createCheckIcon(size = 24, color = '#4caf50') {
+function createCheckIconForExport(size = 24, color = '#4caf50') {
   // Icône "Check Circle" de Heroicons
   const iconGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -48,7 +50,7 @@ function createCheckIcon(size = 24, color = '#4caf50') {
   return iconGroup;
 }
 
-function createCrossIcon(size = 24, color = '#f44336') {
+function createCrossIconForExport(size = 24, color = '#f44336') {
   // Icône "X Circle" de Heroicons
   const iconGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -70,7 +72,7 @@ function createCrossIcon(size = 24, color = '#f44336') {
   return iconGroup;
 }
 
-function createDashIcon(size = 24, color = '#9e9e9e') {
+function createDashIconForExport(size = 24, color = '#9e9e9e') {
   // Icône "Minus Circle" de Heroicons
   const iconGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -796,18 +798,18 @@ function createStatsGridSVG(includeBackground = false) {
       const iconSize = 24; // Taille uniforme pour toutes les icônes
       
       switch (iconType) {
-        case 'score':
-          iconSvg = createScoreIcon(iconSize, valueColor);
-          break;
-        case 'passed':
-          iconSvg = createCheckIcon(iconSize, valueColor);
-          break;
-        case 'failed':
-          iconSvg = createCrossIcon(iconSize, valueColor);
-          break;
-        case 'notApplicable':
-          iconSvg = createDashIcon(iconSize, valueColor);
-          break;
+              case 'score':
+                iconSvg = createScoreIconForExport(iconSize, valueColor);
+                break;
+              case 'passed':
+                iconSvg = createCheckIconForExport(iconSize, valueColor);
+                break;
+              case 'failed':
+                iconSvg = createCrossIconForExport(iconSize, valueColor);
+                break;
+              case 'notApplicable':
+                iconSvg = createDashIconForExport(iconSize, valueColor);
+                break;
         default:
           iconSvg = null;
       }

@@ -74,6 +74,32 @@ function createInfoIcon(size = 16, color = '#2196f3') {
   return createHeroIcon('M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z', size, color);
 }
 
+// Icônes de statistiques
+function createTotalIcon(size = 20, color = '#333') {
+  // Hashtag (Heroicons) - représente un compteur/nombre total
+  return createHeroIcon('M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5', size, color);
+}
+
+function createScoreIcon(size = 20, color = '#1976d2') {
+  // ChartBar (Heroicons) - représente les statistiques/score
+  return createHeroIcon('M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', size, color);
+}
+
+function createPassedIcon(size = 20, color = '#4caf50') {
+  // CheckCircle (Heroicons) - pour les tests réussis
+  return createHeroIcon('M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', size, color);
+}
+
+function createFailedIcon(size = 20, color = '#f44336') {
+  // XCircle (Heroicons) - pour les tests échoués
+  return createHeroIcon('M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z', size, color);
+}
+
+function createNotApplicableIcon(size = 20, color = '#9e9e9e') {
+  // MinusCircle (Heroicons) - pour les tests non applicables
+  return createHeroIcon('M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z', size, color);
+}
+
 // Fonction pour obtenir une icône SVG en tant que string HTML (pour insertion dans innerHTML)
 function getIconHTML(iconFunction, size = 16, color = 'currentColor') {
   const icon = iconFunction(size, color);

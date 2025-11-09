@@ -228,6 +228,58 @@ function initIcons() {
   if (structurationIcon) {
     structurationIcon.appendChild(createStructurationIcon(20, '#333'));
   }
+  
+  // Icônes des statistiques - Onglet Audit
+  const totalIcon = document.getElementById('stat-icon-total');
+  if (totalIcon) {
+    totalIcon.appendChild(createTotalIcon(20, '#333'));
+  }
+  
+  const passedIcon = document.getElementById('stat-icon-passed');
+  if (passedIcon) {
+    passedIcon.appendChild(createPassedIcon(20, '#4caf50'));
+  }
+  
+  const failedIcon = document.getElementById('stat-icon-failed');
+  if (failedIcon) {
+    failedIcon.appendChild(createFailedIcon(20, '#f44336'));
+  }
+  
+  const notApplicableIcon = document.getElementById('stat-icon-not-applicable');
+  if (notApplicableIcon) {
+    notApplicableIcon.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
+  }
+  
+  const scoreIcon = document.getElementById('stat-icon-score');
+  if (scoreIcon) {
+    scoreIcon.appendChild(createScoreIcon(20, '#1976d2'));
+  }
+  
+  // Icônes des statistiques - Onglet Scores
+  const totalIconScores = document.getElementById('stat-icon-total-scores');
+  if (totalIconScores) {
+    totalIconScores.appendChild(createTotalIcon(20, '#333'));
+  }
+  
+  const passedIconScores = document.getElementById('stat-icon-passed-scores');
+  if (passedIconScores) {
+    passedIconScores.appendChild(createPassedIcon(20, '#4caf50'));
+  }
+  
+  const failedIconScores = document.getElementById('stat-icon-failed-scores');
+  if (failedIconScores) {
+    failedIconScores.appendChild(createFailedIcon(20, '#f44336'));
+  }
+  
+  const notApplicableIconScores = document.getElementById('stat-icon-not-applicable-scores');
+  if (notApplicableIconScores) {
+    notApplicableIconScores.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
+  }
+  
+  const scoreIconScores = document.getElementById('stat-icon-score-scores');
+  if (scoreIconScores) {
+    scoreIconScores.appendChild(createScoreIcon(20, '#1976d2'));
+  }
 }
 
 // Initialisation

@@ -233,18 +233,21 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 **Fonctionnalité ajoutée** : Interface avec deux onglets pour organiser les fonctionnalités.
 
 **Onglet "Audit"** (ouvert par défaut) :
-- Section des compteurs (Total, Réussis, Échoués, Non applicables, Score)
+- Section des compteurs avec icônes Heroicons (Total, Réussis, Échoués, Non applicables, Score)
+  - Structure en deux lignes : Ligne 1 (icône + valeur), Ligne 2 (label)
 - Bouton "Réinitialiser tous les tests"
 - Les 3 catégories dépliables avec tous les tests, checkboxes et boutons d'analyse
 
 **Onglet "Scores"** :
-- Section des compteurs (identique à l'onglet Audit)
+- Section des compteurs avec icônes Heroicons (identique à l'onglet Audit)
+- Bouton d'export pour télécharger la grille de statistiques en PNG
 - Diagramme circulaire de répartition des résultats
 - Tableau récapitulatif (Critères / Résultat)
 
 **Implémentation** :
 - Structure d'onglets avec CSS (bordure active, hover, etc.)
 - Fonction `initTabs()` pour gérer le changement d'onglet
+- Fonction `initIcons()` pour injecter les icônes Heroicons dans la barre de statistiques
 - Compteurs synchronisés dans les deux onglets via `updateStats()`
 - Navigation fluide entre les onglets
 
@@ -310,7 +313,7 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 
 ### 10. Système d'icônes SVG Heroicons
 
-**Fichiers créés/modifiés** : `utils/icons.js`, `panel.html`, `panel.js`, tous les fichiers de tests, `utils/i18n.js`
+**Fichiers créés/modifiés** : `utils/icons.js`, `utils/stats.js`, `panel.html`, `panel.js`, tous les fichiers de tests, `utils/i18n.js`
 
 **Fonctionnalité ajoutée** : Remplacement complet de tous les emojis par des icônes SVG cohérentes basées sur Heroicons.
 
@@ -318,14 +321,24 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 - **Catégories** : Compass (Navigation), Globe (Langage), Clipboard (Structuration)
 - **Actions** : ArrowDownTray (Téléchargement), MagnifyingGlass (Vérification), Eye (Visualisation)
 - **Statuts** : CheckCircle (✓), XCircle (✗), ExclamationTriangle (⚠, ▲), InformationCircle (ℹ️)
-- **Statistiques** : ChartBar (Score), CheckCircle (Réussis), XCircle (Échoués), MinusCircle (Non applicables)
+- **Statistiques (barre de résultats)** : Hashtag (Total), ChartBar (Score), CheckCircle (Réussis), XCircle (Échoués), MinusCircle (Non applicables)
 
 **Implémentation** :
-- **Fichier `utils/icons.js`** : Bibliothèque centralisée de toutes les icônes Heroicons
+- **Fichier `utils/icons.js`** : Bibliothèque centralisée de toutes les icônes Heroicons pour l'UI
   - Fonction `createHeroIcon()` : Crée une icône SVG avec viewBox 24x24 uniforme
-  - Fonctions spécifiques pour chaque type d'icône (createNavigationIcon, createCheckIcon, etc.)
+  - Fonctions spécifiques pour chaque type d'icône (createNavigationIcon, createCheckIcon, createTotalIcon, createScoreIcon, etc.)
   - Fonction `replaceEmojisInMessage()` : Remplace automatiquement les emojis dans les messages par des icônes SVG
   - Fonction `createMessageWithIcons()` : Crée un élément DOM avec des icônes remplacées
+- **Fichier `utils/stats.js`** : Fonctions d'icônes pour l'export SVG (suffixe `ForExport`)
+  - `createScoreIconForExport()`, `createCheckIconForExport()`, `createCrossIconForExport()`, `createDashIconForExport()`
+  - Retournent un groupe SVG (`<g>`) pour l'intégration dans les exports SVG
+  - Résolution du conflit de noms avec `utils/icons.js` en utilisant des noms distincts
+- **Barre de statistiques restructurée** :
+  - Structure en deux lignes : Ligne 1 (icône + valeur côte à côte), Ligne 2 (label centré)
+  - Conteneur `.stat-row` avec `display: flex`, `align-items: center`, `gap: 8px`
+  - Icônes injectées dynamiquement dans `.stat-icon` via `initIcons()` dans `panel.js`
+  - Taille uniforme : toutes les icônes à 20px × 20px (CSS : `width: 20px`, `height: 20px`)
+  - Conteneur `.stat-icon` avec dimensions fixes pour garantir l'alignement
 - **Alignement des icônes dans les titres** :
   - CSS amélioré avec `display: flex` et `align-items: center` sur le parent
   - Utilisation de `gap: 8px` pour l'espacement
@@ -344,6 +357,7 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 - Rendu vectoriel net à toutes les résolutions
 - Pas de dépendance externe : icônes intégrées directement dans le code
 - Homogénéité visuelle : toutes les icônes ont la même taille et le même style
+- Séparation claire entre icônes UI (`utils/icons.js`) et icônes export (`utils/stats.js`)
 
 **Emojis remplacés** :
 - 🧭 → Compass (Navigation)
@@ -357,6 +371,11 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 - ▲ → ExclamationTriangle (Avertissement)
 - ⚠ → ExclamationTriangle (Avertissement)
 - ℹ️ → InformationCircle (Information)
+
+**Corrections apportées** :
+- Résolution du conflit de noms entre `createScoreIcon()` dans `utils/icons.js` (pour l'UI) et `utils/stats.js` (pour l'export) en renommant les fonctions d'export avec le suffixe `ForExport`
+- Uniformisation de la taille des icônes dans la barre de statistiques (20px × 20px) avec CSS strict
+- Correction de l'affichage de l'icône Score qui était masquée par le conflit de noms
 
 ### 11. Migration vers pnpm dans les workflows GitHub
 
