@@ -213,26 +213,37 @@ function initExportChart() {
 
 // Initialiser les icônes dans l'interface
 function initIcons() {
+  // Détecter si on est en dark mode
+  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const defaultIconColor = isDarkMode ? '#ffffff' : '#333';
+  
+  // Icône du header
+  const headerIcon = document.getElementById('header-icon');
+  if (headerIcon) {
+    const iconColor = isDarkMode ? '#ffffff' : '#1a1a1a';
+    headerIcon.appendChild(createMagnifyingGlassIcon(20, iconColor));
+  }
+  
   // Icônes des catégories
   const navIcon = document.getElementById('category-icon-navigation');
   if (navIcon) {
-    navIcon.appendChild(createNavigationIcon(20, '#333'));
+    navIcon.appendChild(createNavigationIcon(20, defaultIconColor));
   }
   
   const langageIcon = document.getElementById('category-icon-langage');
   if (langageIcon) {
-    langageIcon.appendChild(createLangageIcon(20, '#333'));
+    langageIcon.appendChild(createLangageIcon(20, defaultIconColor));
   }
   
   const structurationIcon = document.getElementById('category-icon-structuration');
   if (structurationIcon) {
-    structurationIcon.appendChild(createStructurationIcon(20, '#333'));
+    structurationIcon.appendChild(createStructurationIcon(20, defaultIconColor));
   }
   
   // Icônes des statistiques - Onglet Audit
   const totalIcon = document.getElementById('stat-icon-total');
   if (totalIcon) {
-    totalIcon.appendChild(createTotalIcon(20, '#333'));
+    totalIcon.appendChild(createTotalIcon(20, defaultIconColor));
   }
   
   const passedIcon = document.getElementById('stat-icon-passed');
