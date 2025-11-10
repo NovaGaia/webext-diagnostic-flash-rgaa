@@ -16,7 +16,7 @@ function testPageTitle() {
     <div class="test-description">${t('testPageTitleDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div style="margin-bottom: 12px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: 600; color: #333;">${t('testPageTitleInfoTitle')}</h4>
+        <h4 class="test-info-title">${t('testPageTitleInfoTitle')}</h4>
         <div class="page-title-detected" id="test-${testId}-detected" style="display: none;"></div>
       </div>
       <div class="auto-check" id="test-${testId}-info">
@@ -81,15 +81,15 @@ function testPageTitle() {
             let detectedHtml = '';
             
             if (result.title) {
-              detectedHtml += `<div style="margin-bottom: 8px;"><strong>${t('testPageTitleLabel')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.title)}</code></div>`;
+              detectedHtml += `<div style="margin-bottom: 8px;"><strong class="detected-label">${t('testPageTitleLabel')}</strong> <code class="detected-code">${escapeHtml(result.title)}</code></div>`;
             } else {
-              detectedHtml += `<div style="margin-bottom: 8px; color: #999;"><strong>${t('testPageTitleLabel')}</strong> <em>${t('testPageTitleNotFound')}</em></div>`;
+              detectedHtml += `<div style="margin-bottom: 8px; color: var(--color-text-tertiary);"><strong class="detected-label">${t('testPageTitleLabel')}</strong> <em>${t('testPageTitleNotFound')}</em></div>`;
             }
             
             if (result.h1) {
-              detectedHtml += `<div><strong>${t('testPageTitleH1Label')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.h1)}</code></div>`;
+              detectedHtml += `<div><strong class="detected-label">${t('testPageTitleH1Label')}</strong> <code class="detected-code">${escapeHtml(result.h1)}</code></div>`;
             } else {
-              detectedHtml += `<div style="color: #999;"><strong>${t('testPageTitleH1Label')}</strong> <em>${t('testPageTitleH1NotFound')}</em></div>`;
+              detectedHtml += `<div style="color: var(--color-text-tertiary);"><strong class="detected-label">${t('testPageTitleH1Label')}</strong> <em>${t('testPageTitleH1NotFound')}</em></div>`;
             }
             
             detectedElement.innerHTML = detectedHtml;

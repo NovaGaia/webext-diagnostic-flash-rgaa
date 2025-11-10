@@ -14,7 +14,7 @@ function testLanguageDefined() {
     <div class="test-description">${t('testLanguageDefinedDesc')}</div>
     <div class="test-results" id="test-${testId}-results">
       <div style="margin-bottom: 12px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 14px; font-weight: 600; color: #333;">${t('testLanguageDefinedInfoTitle')}</h4>
+        <h4 class="test-info-title">${t('testLanguageDefinedInfoTitle')}</h4>
         <div class="language-detected" id="test-${testId}-detected" style="display: none;"></div>
       </div>
       <div class="auto-check" id="test-${testId}-info">
@@ -75,11 +75,11 @@ function testLanguageDefined() {
         // Le bloc Lang s'affiche en premier
         if (detectedElement) {
           if (result.lang) {
-            const detectedHtml = `<div><strong>${t('testLanguageDefinedLabel')}</strong> <code style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px;">${escapeHtml(result.lang)}</code></div>`;
+            const detectedHtml = `<div><strong class="detected-label">${t('testLanguageDefinedLabel')}</strong> <code class="detected-code">${escapeHtml(result.lang)}</code></div>`;
             detectedElement.innerHTML = detectedHtml;
             detectedElement.style.display = 'block';
           } else {
-            const detectedHtml = `<div style="color: #999;"><strong>${t('testLanguageDefinedLabel')}</strong> <em>${t('testLanguageDefinedNotFound')}</em></div>`;
+            const detectedHtml = `<div style="color: var(--color-text-tertiary);"><strong class="detected-label">${t('testLanguageDefinedLabel')}</strong> <em>${t('testLanguageDefinedNotFound')}</em></div>`;
             detectedElement.innerHTML = detectedHtml;
             detectedElement.style.display = 'block';
           }
