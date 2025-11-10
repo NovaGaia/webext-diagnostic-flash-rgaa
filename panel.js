@@ -240,6 +240,22 @@ function initIcons() {
     structurationIcon.appendChild(createStructurationIcon(20, defaultIconColor));
   }
   
+  // Icônes des thématiques dans l'onglet Informations
+  const navIconInfo = document.getElementById('category-icon-info-navigation');
+  if (navIconInfo) {
+    navIconInfo.appendChild(createNavigationIcon(20, defaultIconColor));
+  }
+  
+  const langageIconInfo = document.getElementById('category-icon-info-langage');
+  if (langageIconInfo) {
+    langageIconInfo.appendChild(createLangageIcon(20, defaultIconColor));
+  }
+  
+  const structurationIconInfo = document.getElementById('category-icon-info-structuration');
+  if (structurationIconInfo) {
+    structurationIconInfo.appendChild(createStructurationIcon(20, defaultIconColor));
+  }
+  
   // Icônes des statistiques - Onglet Audit
   const totalIcon = document.getElementById('stat-icon-total');
   if (totalIcon) {

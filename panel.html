@@ -1203,6 +1203,121 @@
     }
     
     /* ============================================
+       ONGLET INFORMATIONS
+       ============================================ */
+    .info-content {
+      max-width: 100%;
+      padding: 0;
+    }
+    
+    .info-section {
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .info-section:last-child {
+      border-bottom: none;
+    }
+    
+    .info-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #1976d2;
+    }
+    
+    .info-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    
+    .info-text strong {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+    
+    .info-theme {
+      margin-bottom: 25px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border-left: 4px solid #1976d2;
+    }
+    
+    .info-theme-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .info-list {
+      margin: 12px 0;
+      padding-left: 20px;
+      color: #333;
+    }
+    
+    .info-list li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    
+    .info-link {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .info-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .info-comparison-item {
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .info-comparison-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #1976d2;
+    }
+    
+    .info-highlight {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e3f2fd;
+      border-left: 4px solid #1976d2;
+      border-radius: 4px;
+    }
+    
+    .info-external-link {
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .info-external-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* ============================================
        DARK MODE - Détection de la préférence système
        ============================================ */
     @media (prefers-color-scheme: dark) {
@@ -1443,6 +1558,56 @@
       
       .pie-chart-legend-item span {
         color: #ffffff !important;
+      }
+      
+      /* Styles pour l'onglet Informations en dark mode */
+      .info-title {
+        color: #ffffff;
+        border-bottom-color: #64b5f6;
+      }
+      
+      .info-text {
+        color: #e0e0e0;
+      }
+      
+      .info-text strong {
+        color: #ffffff;
+      }
+      
+      .info-theme {
+        background: #2a2a2a;
+        border-left-color: #64b5f6;
+      }
+      
+      .info-theme-title {
+        color: #ffffff;
+      }
+      
+      .info-list {
+        color: #e0e0e0;
+      }
+      
+      .info-link {
+        color: #b0b0b0;
+      }
+      
+      .info-comparison-item {
+        background: #2a2a2a;
+        border-color: #3a3a3a;
+      }
+      
+      .info-comparison-title {
+        color: #64b5f6;
+        border-bottom-color: #64b5f6;
+      }
+      
+      .info-highlight {
+        background: #1e3a5f;
+        border-left-color: #64b5f6;
+      }
+      
+      .info-external-link {
+        color: #64b5f6;
       }
       
       /* Amélioration du contraste pour les résultats du tableau en dark mode */
@@ -1726,6 +1891,20 @@
       .summary-table td {
         padding: 8px 6px;
       }
+      
+      /* Responsive pour l'onglet Informations */
+      .info-comparison {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .info-title {
+        font-size: 16px;
+      }
+      
+      .info-theme-title {
+        font-size: 14px;
+      }
     }
     
     @media (max-width: 480px) {
@@ -1818,6 +1997,23 @@
       .summary-table th {
         border-bottom: 2px solid #3a3a3a;
       }
+      
+      /* Responsive pour l'onglet Informations sur mobile */
+      .info-comparison {
+        grid-template-columns: 1fr;
+      }
+      
+      .info-title {
+        font-size: 14px;
+      }
+      
+      .info-theme {
+        padding: 12px;
+      }
+      
+      .info-text {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -1839,6 +2035,9 @@
         </li>
         <li class="tab-item">
           <button class="tab-button" data-tab="scores">Scores</button>
+        </li>
+        <li class="tab-item">
+          <button class="tab-button" data-tab="informations">Informations</button>
         </li>
       </ul>
     </div>
@@ -1984,6 +2183,159 @@
       </div>
       
       <div id="summary-table-container" style="margin-bottom: 20px; overflow-x: auto;"></div>
+    </div>
+    
+    <!-- Onglet Informations -->
+    <div class="tab-content" id="tab-informations">
+      <div class="info-content">
+        <section class="info-section">
+          <h2 class="info-title">Qu'est-ce que le diagnostic flash ?</h2>
+          <p class="info-text">
+            Le <strong>diagnostic flash</strong> permet d'estimer de manière <strong>rapide et partielle</strong> l'accessibilité d'un site ou d'un service en ligne, sans avoir d'expertise particulière.
+          </p>
+          <p class="info-text">
+            Il est inutile de faire un audit de conformité au RGAA (Référentiel général d'amélioration de l'accessibilité) tant que tous ces critères ne sont pas respectés.
+          </p>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Les trois thématiques</h2>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-navigation"></span>
+              Navigation & utilisation
+            </h3>
+            <p class="info-text">
+              Cette thématique vérifie que le site est utilisable par tous, indépendamment du dispositif ou de la méthode de navigation. Elle couvre :
+            </p>
+            <ul class="info-list">
+              <li>L'adaptation à toutes les tailles d'écran (responsive design)</li>
+              <li>La navigation au clavier et la visibilité du focus</li>
+              <li>La présence de plusieurs moyens de navigation</li>
+              <li>L'accessibilité des fichiers téléchargeables</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour garantir que tous les utilisateurs, y compris ceux utilisant des aides techniques (lecteurs d'écran, navigation au clavier), puissent accéder et utiliser le site efficacement.
+            </p>
+          </div>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-langage"></span>
+              Langage & interface
+            </h3>
+            <p class="info-text">
+              Cette thématique s'assure que les contenus sont compréhensibles et utilisables par tous. Elle vérifie :
+            </p>
+            <ul class="info-list">
+              <li>Les contrastes de couleurs (texte et éléments interactifs)</li>
+              <li>L'information par la couleur (non exclusive)</li>
+              <li>Les alternatives textuelles pour les médias (images, vidéos, audio)</li>
+              <li>La définition de la langue principale</li>
+              <li>La clarté des liens</li>
+              <li>La possibilité d'agrandir le texte jusqu'à 200%</li>
+              <li>Le contrôle des animations et sons</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour permettre à tous les utilisateurs de percevoir, comprendre et interagir avec les contenus, quelles que soient leurs capacités visuelles, auditives ou cognitives.
+            </p>
+          </div>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-structuration"></span>
+              Structuration de l'information
+            </h3>
+            <p class="info-text">
+              Cette thématique vérifie que l'information est bien organisée et structurée. Elle contrôle :
+            </p>
+            <ul class="info-list">
+              <li>L'unicité et la pertinence du titre de page</li>
+              <li>La hiérarchie complète et cohérente des titres (H1, H2, H3...)</li>
+              <li>L'association claire des champs de formulaire avec leurs intitulés</li>
+              <li>Les informations relatives aux fichiers téléchargeables (format, taille, langue)</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour permettre une navigation efficace et une compréhension claire de la structure du contenu, notamment pour les utilisateurs de lecteurs d'écran qui naviguent de titre en titre.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Diagnostic flash vs Audit RGAA complet</h2>
+          
+          <div class="info-comparison">
+            <div class="info-comparison-item">
+              <h3 class="info-comparison-title">Diagnostic flash</h3>
+              <ul class="info-list">
+                <li><strong>Objectif</strong> : Estimation rapide et partielle</li>
+                <li><strong>Durée</strong> : Quelques minutes</li>
+                <li><strong>Expertise requise</strong> : Aucune</li>
+                <li><strong>Critères</strong> : 15 critères essentiels</li>
+                <li><strong>Thématiques</strong> : 3 thématiques principales</li>
+                <li><strong>Usage</strong> : Point de départ, vérification rapide</li>
+              </ul>
+            </div>
+            
+            <div class="info-comparison-item">
+              <h3 class="info-comparison-title">Audit RGAA complet</h3>
+              <ul class="info-list">
+                <li><strong>Objectif</strong> : Conformité complète et exhaustive</li>
+                <li><strong>Durée</strong> : Plusieurs jours/semaines</li>
+                <li><strong>Expertise requise</strong> : Expertise en accessibilité</li>
+                <li><strong>Critères</strong> : 106 critères (RGAA 4.1)</li>
+                <li><strong>Thématiques</strong> : 13 thématiques complètes</li>
+                <li><strong>Usage</strong> : Conformité légale, déclaration d'accessibilité</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="info-highlight">
+            <p class="info-text">
+              <strong>Important</strong> : Le diagnostic flash est une recommandation. Il est recommandé de réaliser un diagnostic flash avant de procéder à un audit RGAA complet.
+            </p>
+            <p class="info-text">
+              Le diagnostic flash couvre les critères les plus fondamentaux et les plus fréquemment problématiques. Une fois ces critères respectés, vous pouvez procéder à un audit complet pour vérifier la conformité à l'ensemble du référentiel RGAA.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Extensions recommandées</h2>
+          <p class="info-text">
+            Pour réaliser un diagnostic flash complet, il est recommandé d'utiliser également ces extensions de navigateur :
+          </p>
+          <ul class="info-list">
+            <li>
+              <strong>HeadingsMap</strong> (pictogramme [h/]) : Pour vérifier la hiérarchie des titres
+              <br>
+              <span class="info-link">Disponible pour Chrome, Firefox et Edge</span>
+            </li>
+            <li>
+              <strong>Contrast Checker</strong> (roue multicolore) : Pour vérifier les contrastes de couleurs
+              <br>
+              <span class="info-link">Disponible pour Chrome, Firefox et Edge</span>
+            </li>
+          </ul>
+          <div class="info-highlight" style="margin-top: 15px;">
+            <p class="info-text">
+              <strong>Note</strong> : Cette extension intègre certaines fonctionnalités (en beta) de ces plugins recommandés. Cependant, les extensions HeadingsMap et Contrast Checker restent la recommandation officielle des concepteurs du Diagnostic flash et sont à privilégier pour un diagnostic complet.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Référence</h2>
+          <p class="info-text">
+            Cette extension est basée sur le référentiel du diagnostic flash disponible sur :
+            <br>
+            <a href="https://design.numerique.gouv.fr/outils/diagnostic-flash/" target="_blank" rel="noopener noreferrer" class="info-external-link">
+              design.numerique.gouv.fr/outils/diagnostic-flash/
+            </a>
+          </p>
+        </section>
+      </div>
     </div>
   </div>
   
