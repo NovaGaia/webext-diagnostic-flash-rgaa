@@ -71,6 +71,7 @@ pnpm run generate-icons
 - **Export des résultats** : Téléchargement du diagramme circulaire et de la grille de statistiques en PNG
 - **Visualisations interactives** : Analyse des champs de formulaire et des alternatives textuelles avec mise en évidence visuelle
 - **Système d'icônes SVG** : Interface cohérente avec des icônes Heroicons
+- **Architecture modulaire** : Code organisé en modules séparés (CSS, visualisations, tests) pour une meilleure maintenabilité
 
 ## 📦 Versioning et Releases
 
@@ -120,17 +121,25 @@ Les packages sont automatiquement générés et attachés à chaque release GitH
 ├── background.js         # Service worker (background)
 ├── devtools.html         # Page d'entrée DevTools
 ├── devtools.js           # Création du panneau DevTools
-├── panel.html            # Interface du panneau DevTools
+├── panel.html            # Interface du panneau DevTools (HTML uniquement)
+├── panel.css             # Styles CSS du panneau (séparé du HTML)
 ├── panel.js              # Orchestration principale
 ├── utils/                # Utilitaires
 │   ├── i18n.js          # Système de traduction
+│   ├── icons.js         # Système d'icônes SVG Heroicons
 │   ├── ui.js             # Fonctions UI
 │   ├── stats.js          # Gestion des statistiques
 │   └── cleanup.js        # Nettoyage des visualisations
 ├── tests/                # Tests d'accessibilité
 │   ├── navigation/      # Tests de navigation
+│   │   └── keyboard-visualization.js  # Visualisation de la navigation clavier
 │   ├── langage/          # Tests de langage & interface
+│   │   ├── contrasts/    # Modules d'analyse des contrastes (divisés)
+│   │   ├── media-alternatives.js  # Test principal des alternatives média
+│   │   └── media-alternatives-visualization.js  # Visualisation des alternatives
 │   └── structuration/    # Tests de structuration
+│       ├── form-fields.js  # Test principal des champs de formulaire
+│       └── form-fields-visualization.js  # Visualisation des champs
 └── scripts/              # Scripts utilitaires
     ├── package-chrome.js # Script de packaging Chrome
     ├── package-firefox.js# Script de packaging Firefox

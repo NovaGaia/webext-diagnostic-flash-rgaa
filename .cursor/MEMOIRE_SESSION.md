@@ -17,9 +17,9 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
 
 ### 0. Refactorisation de la structure des fichiers (Session récente)
 
-**Problème identifié** : Les fichiers `visualizations/keyboard.js` et `visualizations/contrasts.js` n'étaient pas logiquement placés sous `tests/` alors qu'ils sont spécifiques à certains tests.
+**Problème identifié** : Les fichiers devenaient trop longs et difficiles à maintenir. `panel.html` contenait plus de 2600 lignes avec tout le CSS intégré, et certains fichiers de tests dépassaient 500 lignes.
 
-**Solution mise en place** :
+**Solutions mises en place** :
 
 1. **Déplacement de `keyboard.js`** :
    - `visualizations/keyboard.js` → `tests/navigation/keyboard-visualization.js`
@@ -32,10 +32,38 @@ Extension navigateur (Chrome/Firefox) pour réaliser le diagnostic flash d'acces
    - **`highlight.js`** (636 lignes) : Fonctions de mise en évidence sur la page
    - **`observer.js`** (120 lignes) : Gestion du MutationObserver pour auto-refresh
 
+3. **Séparation du CSS de `panel.html`** :
+   - **`panel.html`** : 2612 lignes → 386 lignes (réduction de 85%)
+   - **`panel.css`** : 2225 lignes (nouveau fichier)
+   - Le CSS est maintenant dans un fichier séparé référencé via `<link rel="stylesheet" href="panel.css">`
+   - Améliore grandement la lisibilité et la maintenabilité
+
+4. **Division des fichiers de tests avec visualisation** :
+   - **`form-fields.js`** : 391 lignes → 138 lignes (réduction de 65%)
+     - **`form-fields-visualization.js`** : 255 lignes (nouveau fichier)
+     - Séparation de la logique de visualisation du test principal
+   - **`media-alternatives.js`** : 527 lignes → 139 lignes (réduction de 74%)
+     - **`media-alternatives-visualization.js`** : 391 lignes (nouveau fichier)
+     - Séparation de la logique de visualisation du test principal
+   - **`keyboard-visualization.js`** : 518 lignes (conservé tel quel, fichier utilitaire)
+
+**Structure des fichiers de tests divisés** :
+- **Fichier principal** (`form-fields.js`, `media-alternatives.js`) :
+  - Initialisation du test
+  - Gestion des boutons et événements
+  - Mise à jour du statut
+  - Fonction de toggle (`analyzeFormFields()`, `analyzeMediaAlternatives()`)
+- **Fichier de visualisation** (`*-visualization.js`) :
+  - Logique complète de visualisation (`showXxxVisualization()`)
+  - Fonction de nettoyage (`cleanupXxxVisualization()`)
+  - Scripts injectés dans la page inspectée
+
 **Bénéfices** :
 - Structure plus logique et organisée
-- Fichiers plus petits et maintenables
-- Séparation claire des responsabilités
+- Fichiers plus petits et maintenables (réduction de 65-85% pour les fichiers principaux)
+- Séparation claire des responsabilités (test vs visualisation)
+- Meilleure lisibilité du code
+- CSS séparé du HTML pour faciliter les modifications de style
 - Suppression du dossier `visualizations/` (maintenant vide)
 
 ### 1. Affichage automatique du titre et H1
@@ -798,7 +826,8 @@ webext-dagnostic-flash-rgaa/
 ├── background.js              # Service worker
 ├── devtools.html              # Point d'entrée DevTools
 ├── devtools.js                # Création du panneau DevTools
-├── panel.html                 # Interface du panneau (HTML + CSS) avec système d'onglets
+├── panel.html                 # Interface du panneau (HTML uniquement) avec système d'onglets
+├── panel.css                  # Styles CSS du panneau (séparé du HTML, 2225 lignes)
 ├── panel.js                   # Orchestration principale (gestion des onglets)
 ├── generate-icons.js          # Script de génération d'icônes
 ├── icons/                     # Icônes de l'extension
@@ -826,11 +855,17 @@ webext-dagnostic-flash-rgaa/
 │   │   │   ├── display.js               # Affichage des résultats
 │   │   │   ├── highlight.js             # Mise en évidence des éléments
 │   │   │   └── observer.js              # MutationObserver pour auto-refresh
+│   │   ├── media-alternatives.js        # Test principal des alternatives média
+│   │   ├── media-alternatives-visualization.js  # Visualisation des alternatives
+│   │   ├── language-defined.js
+│   │   ├── explicit-links.js
+│   │   ├── text-resize.js
 │   │   └── animations.js
 │   └── structuration/
 │       ├── page-title.js
 │       ├── headings-hierarchy.js
-│       ├── form-fields.js
+│       ├── form-fields.js               # Test principal des champs de formulaire
+│       ├── form-fields-visualization.js # Visualisation des champs
 │       └── download-info.js
 ├── README.md
 ├── QUICKSTART.md
@@ -918,6 +953,7 @@ webext-dagnostic-flash-rgaa/
 - ✅ Responsive design pour tablettes et mobiles
 - ✅ Menu contextuel (clic droit) et action de barre d'outils pour accès rapide
 - ✅ Amélioration des contrastes pour tous les éléments (light et dark mode)
+- ✅ Refactorisation de la structure : CSS séparé du HTML (panel.css), fichiers de tests divisés en modules (test principal + visualisation)
 
 ---
 
@@ -938,8 +974,16 @@ Dans `panel.html`, l'ordre est important :
    - `tests/langage/contrasts/display.js`
    - `tests/langage/contrasts/highlight.js`
    - `tests/langage/contrasts/observer.js`
-6. Tous les tests
-7. `panel.js` (en dernier)
+6. Tests Navigation
+7. Tests Langage :
+   - `tests/langage/media-alternatives-visualization.js` (avant le test principal)
+   - `tests/langage/media-alternatives.js` (utilise les fonctions de visualisation)
+8. Tests Structuration :
+   - `tests/structuration/form-fields-visualization.js` (avant le test principal)
+   - `tests/structuration/form-fields.js` (utilise les fonctions de visualisation)
+9. `panel.js` (en dernier, orchestration)
+
+**Note importante** : Les fichiers de visualisation (`*-visualization.js`) doivent être chargés **avant** les fichiers de tests principaux qui les utilisent, car ils définissent les fonctions `showXxxVisualization()` et `cleanupXxxVisualization()`.
 
 ### IDs des éléments de documentation
 Pour chaque test, les IDs des sections sont :
