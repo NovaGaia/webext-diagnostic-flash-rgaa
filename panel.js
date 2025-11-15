@@ -277,6 +277,11 @@ function initIcons() {
     notApplicableIcon.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
   }
   
+  const derogationIcon = document.getElementById('stat-icon-derogation');
+  if (derogationIcon) {
+    derogationIcon.appendChild(createWarningIcon(20, '#ff9800'));
+  }
+  
   const scoreIcon = document.getElementById('stat-icon-score');
   if (scoreIcon) {
     scoreIcon.appendChild(createScoreIcon(20, '#1976d2'));
@@ -301,6 +306,11 @@ function initIcons() {
   const notApplicableIconScores = document.getElementById('stat-icon-not-applicable-scores');
   if (notApplicableIconScores) {
     notApplicableIconScores.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
+  }
+  
+  const derogationIconScores = document.getElementById('stat-icon-derogation-scores');
+  if (derogationIconScores) {
+    derogationIconScores.appendChild(createWarningIcon(20, '#ff9800'));
   }
   
   const scoreIconScores = document.getElementById('stat-icon-score-scores');

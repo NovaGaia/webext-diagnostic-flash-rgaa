@@ -94,6 +94,28 @@ function createDashIconForExport(size = 24, color = '#9e9e9e') {
   return iconGroup;
 }
 
+function createWarningIconForExport(size = 24, color = '#ff9800') {
+  // Icône "Exclamation Triangle" de Heroicons
+  const iconGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', size);
+  svg.setAttribute('height', size);
+  svg.setAttribute('fill', 'none');
+  
+  // Path de l'icône Exclamation Triangle (Heroicons)
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('stroke-linejoin', 'round');
+  path.setAttribute('stroke-width', '2');
+  path.setAttribute('stroke', color);
+  path.setAttribute('d', 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z');
+  svg.appendChild(path);
+  iconGroup.appendChild(svg);
+  
+  return iconGroup;
+}
+
 // Structure des catégories
 const categories = {
   navigation: {
@@ -148,6 +170,7 @@ function updateStats() {
   let passed = 0;
   let failed = 0;
   let notApplicable = 0;
+  let derogation = 0;
   
   Object.keys(categories).forEach(categoryId => {
     const categoryTests = categories[categoryId].tests;
@@ -159,16 +182,18 @@ function updateStats() {
         failed++;
       } else if (test.status === 'not-applicable') {
         notApplicable++;
+      } else if (test.status === 'derogation') {
+        derogation++;
       }
       // Les tests avec status 'warning' sont comptés dans total mais pas dans passed/failed
     });
   });
   
   // Calcul du score sur 100
-  // Algorithme: (nb total de critères (15) - nb de critères non applicables) / nb de critères validés
-  // Score = (nb_validés / (15 - nb_non_applicables)) * 100
+  // Algorithme: (nb total de critères (15) - nb de critères non applicables - nb de dérogations) / nb de critères validés
+  // Score = (nb_validés / (15 - nb_non_applicables - nb_dérogations)) * 100
   let score = 0;
-  const applicableCriteria = TOTAL_CRITERIA - notApplicable;
+  const applicableCriteria = TOTAL_CRITERIA - notApplicable - derogation;
   if (applicableCriteria > 0) {
     score = Math.round((passed / applicableCriteria) * 100);
   } else {
@@ -181,6 +206,7 @@ function updateStats() {
   const passedEl = document.getElementById('passedTests');
   const failedEl = document.getElementById('failedTests');
   const notApplicableEl = document.getElementById('notApplicableTests');
+  const derogationEl = document.getElementById('derogationTests');
   const scoreEl = document.getElementById('scoreValue');
   
   // Mettre à jour les stats dans l'onglet Scores
@@ -188,6 +214,7 @@ function updateStats() {
   const passedElScores = document.getElementById('passedTestsScores');
   const failedElScores = document.getElementById('failedTestsScores');
   const notApplicableElScores = document.getElementById('notApplicableTestsScores');
+  const derogationElScores = document.getElementById('derogationTestsScores');
   const scoreElScores = document.getElementById('scoreValueScores');
   
   const updateStatElement = (el, value) => {
@@ -216,6 +243,7 @@ function updateStats() {
   updateStatElement(passedEl, passed);
   updateStatElement(failedEl, failed);
   updateStatElement(notApplicableEl, notApplicable);
+  updateStatElement(derogationEl, derogation);
   updateScoreElement(scoreEl, score);
   
   // Mettre à jour aussi dans l'onglet Scores
@@ -223,6 +251,7 @@ function updateStats() {
   updateStatElement(passedElScores, passed);
   updateStatElement(failedElScores, failed);
   updateStatElement(notApplicableElScores, notApplicable);
+  updateStatElement(derogationElScores, derogation);
   updateScoreElement(scoreElScores, score);
   
   if (!totalEl && !totalElScores) {
@@ -230,7 +259,7 @@ function updateStats() {
   }
   
   // Mettre à jour le diagramme circulaire
-  updatePieChart(passed, failed, notApplicable);
+  updatePieChart(passed, failed, notApplicable, derogation);
   
   // Mettre à jour les compteurs de progression par catégorie
   updateCategoryProgress();
@@ -240,7 +269,7 @@ function updateStats() {
 }
 
 // Mettre à jour le diagramme circulaire
-function updatePieChart(passed, failed, notApplicable) {
+function updatePieChart(passed, failed, notApplicable, derogation) {
   const svg = document.getElementById('pieChart');
   const legend = document.getElementById('pieChartLegend');
   
@@ -250,7 +279,7 @@ function updatePieChart(passed, failed, notApplicable) {
   svg.innerHTML = '';
   legend.innerHTML = '';
   
-  const total = passed + failed + notApplicable;
+  const total = passed + failed + notApplicable + derogation;
   
   // Si aucun test validé, afficher un cercle gris
   if (total === 0) {
@@ -282,18 +311,33 @@ function updatePieChart(passed, failed, notApplicable) {
   const passedAngle = (passed / total) * 360;
   const failedAngle = (failed / total) * 360;
   const notApplicableAngle = (notApplicable / total) * 360;
+  const derogationAngle = (derogation / total) * 360;
   
   // Couleurs
   const colors = {
     passed: '#4caf50',
     failed: '#f44336',
-    notApplicable: '#9e9e9e'
+    notApplicable: '#9e9e9e',
+    derogation: '#ff9800'
   };
   
   // Dessiner les arcs
   let currentAngle = -90; // Commencer en haut
   
   function createArc(startAngle, endAngle, color) {
+    // Cas spécial : arc complet (360 degrés) - dessiner un cercle
+    if (Math.abs(endAngle - startAngle) >= 360) {
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', centerX);
+      circle.setAttribute('cy', centerY);
+      circle.setAttribute('r', radius);
+      circle.setAttribute('fill', color);
+      circle.setAttribute('stroke', '#fff');
+      circle.setAttribute('stroke-width', '2');
+      svg.appendChild(circle);
+      return;
+    }
+    
     const startAngleRad = (startAngle * Math.PI) / 180;
     const endAngleRad = (endAngle * Math.PI) / 180;
     
@@ -326,13 +370,19 @@ function updatePieChart(passed, failed, notApplicable) {
   
   if (notApplicable > 0) {
     createArc(currentAngle, currentAngle + notApplicableAngle, colors.notApplicable);
+    currentAngle += notApplicableAngle;
+  }
+  
+  if (derogation > 0) {
+    createArc(currentAngle, currentAngle + derogationAngle, colors.derogation);
   }
   
   // Créer la légende
   const legendItems = [
     { label: t('statsPassed'), color: colors.passed, count: passed },
     { label: t('statsFailed'), color: colors.failed, count: failed },
-    { label: t('statsNotApplicable'), color: colors.notApplicable, count: notApplicable }
+    { label: t('statsNotApplicable'), color: colors.notApplicable, count: notApplicable },
+    { label: t('statsDerogation'), color: colors.derogation, count: derogation }
   ].filter(item => item.count > 0);
   
   // Stocker les données de la légende pour l'export
@@ -375,6 +425,7 @@ function updateCategoryProgress() {
     let failed = 0;
     let notApplicable = 0;
     
+    let derogation = 0;
     categoryTests.forEach(test => {
       if (test.status === 'passed') {
         passed++;
@@ -382,11 +433,13 @@ function updateCategoryProgress() {
         failed++;
       } else if (test.status === 'not-applicable') {
         notApplicable++;
+      } else if (test.status === 'derogation') {
+        derogation++;
       }
     });
     
-    // Calculer le total validé (réussis + échoués + non applicables)
-    const validated = passed + failed + notApplicable;
+    // Calculer le total validé (réussis + échoués + non applicables + dérogations)
+    const validated = passed + failed + notApplicable + derogation;
     const total = category.totalTests;
     
     // Trouver le header de la catégorie
@@ -520,6 +573,9 @@ function updateSummaryTable() {
       } else if (test.status === 'not-applicable') {
         tdResult.textContent = 'N/A';
         tdResult.className += ' summary-na';
+      } else if (test.status === 'derogation') {
+        tdResult.textContent = 'Dérogation';
+        tdResult.className += ' summary-na';
       } else {
         tdResult.textContent = '-';
         tdResult.className += ' summary-pending';
@@ -557,17 +613,6 @@ function createExportSVG(includeBackground = false) {
     }
   }
   
-  // Récupérer les statistiques depuis le DOM
-  const scoreEl = document.getElementById('scoreValueScores') || document.getElementById('scoreValue');
-  const passedEl = document.getElementById('passedTestsScores') || document.getElementById('passedTests');
-  const failedEl = document.getElementById('failedTestsScores') || document.getElementById('failedTests');
-  const notApplicableEl = document.getElementById('notApplicableTestsScores') || document.getElementById('notApplicableTests');
-  
-  const score = scoreEl ? parseInt(scoreEl.textContent) || 0 : 0;
-  const passed = passedEl ? parseInt(passedEl.textContent) || 0 : 0;
-  const failed = failedEl ? parseInt(failedEl.textContent) || 0 : 0;
-  const notApplicable = notApplicableEl ? parseInt(notApplicableEl.textContent) || 0 : 0;
-  
   // Cloner le SVG du diagramme
   const clonedSvg = svg.cloneNode(true);
   
@@ -579,9 +624,10 @@ function createExportSVG(includeBackground = false) {
   // Dimensions
   const svgWidth = parseInt(svg.getAttribute('width') || 200);
   const svgHeight = parseInt(svg.getAttribute('height') || 200);
-  const legendHeight = legendData ? 60 : 0;
-  const statsGridHeight = 120; // Hauteur de la grille de stats (2x2)
-  const totalHeight = svgHeight + legendHeight + statsGridHeight + 30; // 30px de marges
+  // Calculer la hauteur de la légende en fonction du nombre d'items
+  const legendItemCount = legendData && legendData.items ? legendData.items.length : 0;
+  const legendHeight = legendItemCount > 0 ? legendItemCount * 25 + 10 : 0; // 25px par item + 10px de marge
+  const totalHeight = svgHeight + legendHeight + 20; // 20px de marge
   
   // Créer un nouveau SVG conteneur
   const exportSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -640,99 +686,6 @@ function createExportSVG(includeBackground = false) {
     exportSvg.appendChild(legendGroup);
   }
   
-  // Ajouter la grille de statistiques 2x2
-  const statsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  statsGroup.setAttribute('transform', `translate(0, ${svgHeight + legendHeight + 20})`);
-  
-  const cellWidth = svgWidth / 2;
-  const cellHeight = statsGridHeight / 2;
-  const padding = 10;
-  
-  // Fonction pour créer une cellule de statistique
-  const createStatCell = (x, y, value, label, valueColor, valueSize, icon) => {
-    const cellGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    cellGroup.setAttribute('transform', `translate(${x}, ${y})`);
-    
-    // Fond de la cellule
-    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    bg.setAttribute('x', padding);
-    bg.setAttribute('y', padding);
-    bg.setAttribute('width', cellWidth - padding * 2);
-    bg.setAttribute('height', cellHeight - padding * 2);
-    bg.setAttribute('fill', '#f5f5f5');
-    bg.setAttribute('rx', '4');
-    cellGroup.appendChild(bg);
-    
-    // Calculer les positions verticales pour éviter les chevauchements
-    const centerY = cellHeight / 2;
-    let iconY, valueY, labelY;
-    
-    if (icon) {
-      // Avec picto : répartir l'espace verticalement
-      iconY = centerY - 35; // Picto en haut
-      valueY = centerY - 5; // Valeur au centre
-      labelY = centerY + 20; // Label en bas
-    } else {
-      // Sans picto : valeur et label centrés
-      valueY = centerY - 5;
-      labelY = centerY + 15;
-    }
-    
-    // Picto (icône)
-    if (icon) {
-      const iconText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      iconText.setAttribute('x', cellWidth / 2);
-      iconText.setAttribute('y', iconY);
-      iconText.setAttribute('text-anchor', 'middle');
-      iconText.setAttribute('font-size', '18');
-      iconText.setAttribute('dominant-baseline', 'middle');
-      iconText.textContent = icon;
-      cellGroup.appendChild(iconText);
-    }
-    
-    // Valeur
-    const valueText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    valueText.setAttribute('x', cellWidth / 2);
-    valueText.setAttribute('y', valueY);
-    valueText.setAttribute('text-anchor', 'middle');
-    valueText.setAttribute('font-size', valueSize);
-    valueText.setAttribute('font-family', 'Verdana, sans-serif');
-    valueText.setAttribute('font-weight', 'bold');
-    valueText.setAttribute('fill', valueColor);
-    valueText.setAttribute('dominant-baseline', 'middle');
-    valueText.textContent = value;
-    cellGroup.appendChild(valueText);
-    
-    // Label
-    const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    labelText.setAttribute('x', cellWidth / 2);
-    labelText.setAttribute('y', labelY);
-    labelText.setAttribute('text-anchor', 'middle');
-    labelText.setAttribute('font-size', '11');
-    labelText.setAttribute('font-family', 'Verdana, sans-serif');
-    labelText.setAttribute('fill', '#666');
-    labelText.setAttribute('dominant-baseline', 'middle');
-    labelText.textContent = label;
-    cellGroup.appendChild(labelText);
-    
-    return cellGroup;
-  };
-  
-  // Grille 2x2 : Score en premier (en plus gros), puis Réussis, Échoués, Non applicables
-  // Ligne 1, Colonne 1 : Score (sans picto dans l'export du diagramme)
-  statsGroup.appendChild(createStatCell(0, 0, score, t('statsScore'), '#1976d2', '32', null));
-  
-  // Ligne 1, Colonne 2 : Réussis
-  statsGroup.appendChild(createStatCell(cellWidth, 0, passed, t('statsPassed'), '#4caf50', '18', null));
-  
-  // Ligne 2, Colonne 1 : Échoués
-  statsGroup.appendChild(createStatCell(0, cellHeight, failed, t('statsFailed'), '#f44336', '18', null));
-  
-  // Ligne 2, Colonne 2 : Non applicables
-  statsGroup.appendChild(createStatCell(cellWidth, cellHeight, notApplicable, t('statsNotApplicable'), '#9e9e9e', '18', null));
-  
-  exportSvg.appendChild(statsGroup);
-  
   return exportSvg;
 }
 
@@ -743,17 +696,19 @@ function createStatsGridSVG(includeBackground = false) {
   const passedEl = document.getElementById('passedTestsScores') || document.getElementById('passedTests');
   const failedEl = document.getElementById('failedTestsScores') || document.getElementById('failedTests');
   const notApplicableEl = document.getElementById('notApplicableTestsScores') || document.getElementById('notApplicableTests');
+  const derogationEl = document.getElementById('derogationTestsScores') || document.getElementById('derogationTests');
   
   const score = scoreEl ? parseInt(scoreEl.textContent) || 0 : 0;
   const passed = passedEl ? parseInt(passedEl.textContent) || 0 : 0;
   const failed = failedEl ? parseInt(failedEl.textContent) || 0 : 0;
   const notApplicable = notApplicableEl ? parseInt(notApplicableEl.textContent) || 0 : 0;
+  const derogation = derogationEl ? parseInt(derogationEl.textContent) || 0 : 0;
   
   // Dimensions de la grille
   const gridWidth = 400;
-  const gridHeight = 200;
+  const gridHeight = 300; // 3 lignes au lieu de 2
   const cellWidth = gridWidth / 2;
-  const cellHeight = gridHeight / 2;
+  const cellHeight = gridHeight / 3;
   const padding = 10;
   
   // Créer un nouveau SVG conteneur
@@ -772,7 +727,7 @@ function createStatsGridSVG(includeBackground = false) {
   }
   
   // Fonction pour créer une cellule de statistique
-  const createStatCell = (x, y, value, label, valueColor, valueSize, iconType) => {
+  const createStatCell = (x, y, value, label, valueColor, valueSize, iconType, colSpan = 1) => {
     const cellGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     cellGroup.setAttribute('transform', `translate(${x}, ${y})`);
     
@@ -780,7 +735,7 @@ function createStatsGridSVG(includeBackground = false) {
     const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     bg.setAttribute('x', padding);
     bg.setAttribute('y', padding);
-    bg.setAttribute('width', cellWidth - padding * 2);
+    bg.setAttribute('width', (cellWidth * colSpan) - (padding * 2));
     bg.setAttribute('height', cellHeight - padding * 2);
     bg.setAttribute('fill', '#f5f5f5');
     bg.setAttribute('rx', '4');
@@ -810,20 +765,23 @@ function createStatsGridSVG(includeBackground = false) {
               case 'notApplicable':
                 iconSvg = createDashIconForExport(iconSize, valueColor);
                 break;
+              case 'derogation':
+                iconSvg = createWarningIconForExport(iconSize, valueColor);
+                break;
         default:
           iconSvg = null;
       }
       
       if (iconSvg) {
         // Positionner l'icône à gauche de la valeur
-        iconSvg.setAttribute('transform', `translate(${cellWidth / 2 - 30}, ${line1Y - iconSize / 2})`);
+        iconSvg.setAttribute('transform', `translate(${(cellWidth * colSpan) / 2 - 30}, ${line1Y - iconSize / 2})`);
         cellGroup.appendChild(iconSvg);
       }
     }
     
     // Valeur à droite du picto (ou centrée si pas de picto)
     const valueText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    valueText.setAttribute('x', iconType ? cellWidth / 2 + 20 : cellWidth / 2);
+    valueText.setAttribute('x', iconType ? (cellWidth * colSpan) / 2 + 20 : (cellWidth * colSpan) / 2);
     valueText.setAttribute('y', line1Y);
     valueText.setAttribute('text-anchor', 'middle');
     valueText.setAttribute('font-size', valueSize);
@@ -836,7 +794,7 @@ function createStatsGridSVG(includeBackground = false) {
     
     // Ligne 2 : Label (centré)
     const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    labelText.setAttribute('x', cellWidth / 2);
+    labelText.setAttribute('x', (cellWidth * colSpan) / 2);
     labelText.setAttribute('y', line2Y);
     labelText.setAttribute('text-anchor', 'middle');
     labelText.setAttribute('font-size', '11');
@@ -849,18 +807,122 @@ function createStatsGridSVG(includeBackground = false) {
     return cellGroup;
   };
   
-  // Grille 2x2 : Score en premier (en plus gros), puis Réussis, Échoués, Non applicables
-  // Ligne 1, Colonne 1 : Score
-  exportSvg.appendChild(createStatCell(0, 0, score, t('statsScore'), '#1976d2', '32', 'score'));
+  // Fonction spéciale pour créer la cellule du score avec format "8/100"
+  const createScoreCell = (x, y, score, label, valueColor, valueSize, iconType, colSpan = 2) => {
+    const cellGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    cellGroup.setAttribute('transform', `translate(${x}, ${y})`);
+    
+    // Fond de la cellule
+    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg.setAttribute('x', padding);
+    bg.setAttribute('y', padding);
+    bg.setAttribute('width', (cellWidth * colSpan) - (padding * 2));
+    bg.setAttribute('height', cellHeight - padding * 2);
+    bg.setAttribute('fill', '#f5f5f5');
+    bg.setAttribute('rx', '4');
+    cellGroup.appendChild(bg);
+    
+    // Calculer les positions verticales
+    const centerY = cellHeight / 2;
+    const line1Y = centerY - 5; // Ligne 1 : icône + score
+    const line2Y = centerY + 20; // Ligne 2 : label
+    
+    // Approche simplifiée avec espacements généreux pour éviter les chevauchements
+    const scoreStr = score.toString();
+    // Valeurs conservatrices : on surestime pour éviter les chevauchements
+    // Pour Verdana bold : 0.7 par caractère (surestimation généreuse)
+    const scoreTextWidth = scoreStr.length * (valueSize * 0.7);
+    
+    const suffixSize = Math.round(valueSize * 0.5);
+    // "/100" : 4 caractères à la taille suffixSize, avec surestimation généreuse
+    const suffixWidth = 4 * (suffixSize * 0.7);
+    
+    // Position centrale pour tout le contenu (icône + score + /100)
+    const iconSize = iconType ? 24 : 0;
+    const iconSpacing = iconSize + 15; // 15px espacement après l'icône (très généreux)
+    const scoreSuffixSpacing = 6; // Espacement entre score et /100 (augmenté)
+    const totalContentWidth = iconSpacing + scoreTextWidth + scoreSuffixSpacing + suffixWidth;
+    const startX = (cellWidth * colSpan) / 2 - totalContentWidth / 2;
+    
+    let currentX = startX;
+    
+    // Ligne 1 : Icône à gauche, puis score, puis "/100"
+    if (iconType) {
+      // Créer l'icône SVG selon le type
+      let iconSvg;
+      const iconSize = 24;
+      
+      if (iconType === 'score') {
+        iconSvg = createScoreIconForExport(iconSize, valueColor);
+      }
+      
+      if (iconSvg) {
+        // Positionner l'icône à gauche, alignée verticalement avec le texte
+        const iconY = line1Y - iconSize / 2;
+        iconSvg.setAttribute('transform', `translate(${currentX}, ${iconY})`);
+        cellGroup.appendChild(iconSvg);
+        currentX += iconSize + 15; // Espacement après l'icône (très généreux)
+      }
+    }
+    
+    // Valeur : "80" en grande taille
+    const scoreValueText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    scoreValueText.setAttribute('x', currentX);
+    scoreValueText.setAttribute('y', line1Y);
+    scoreValueText.setAttribute('text-anchor', 'start');
+    scoreValueText.setAttribute('font-size', valueSize);
+    scoreValueText.setAttribute('font-family', 'Verdana, sans-serif');
+    scoreValueText.setAttribute('font-weight', 'bold');
+    scoreValueText.setAttribute('fill', valueColor);
+    scoreValueText.setAttribute('dominant-baseline', 'middle');
+    scoreValueText.textContent = score;
+    cellGroup.appendChild(scoreValueText);
+    // Utiliser un espacement fixe généreux au lieu de calculer précisément
+    currentX += scoreTextWidth + 6; // Espacement fixe généreux après le score
+    
+    // "/100" en plus petite taille, positionné après le score
+    const scoreSuffixText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    scoreSuffixText.setAttribute('x', currentX);
+    scoreSuffixText.setAttribute('y', line1Y);
+    scoreSuffixText.setAttribute('text-anchor', 'start');
+    scoreSuffixText.setAttribute('font-size', suffixSize);
+    scoreSuffixText.setAttribute('font-family', 'Verdana, sans-serif');
+    scoreSuffixText.setAttribute('font-weight', 'bold');
+    scoreSuffixText.setAttribute('fill', valueColor);
+    scoreSuffixText.setAttribute('dominant-baseline', 'middle');
+    scoreSuffixText.textContent = '/100';
+    cellGroup.appendChild(scoreSuffixText);
+    
+    // Ligne 2 : Label (centré)
+    const labelText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    labelText.setAttribute('x', (cellWidth * colSpan) / 2);
+    labelText.setAttribute('y', line2Y);
+    labelText.setAttribute('text-anchor', 'middle');
+    labelText.setAttribute('font-size', '11');
+    labelText.setAttribute('font-family', 'Verdana, sans-serif');
+    labelText.setAttribute('fill', '#666');
+    labelText.setAttribute('dominant-baseline', 'middle');
+    labelText.textContent = label;
+    cellGroup.appendChild(labelText);
+    
+    return cellGroup;
+  };
   
-  // Ligne 1, Colonne 2 : Réussis
-  exportSvg.appendChild(createStatCell(cellWidth, 0, passed, t('statsPassed'), '#4caf50', '18', 'passed'));
+  // Grille 3x2 : Score sur 2 colonnes en premier, puis Réussis, Échoués, Non applicables, Dérogations
+  // Ligne 1 : Score sur 2 colonnes
+  exportSvg.appendChild(createScoreCell(0, 0, score, t('statsScore'), '#1976d2', '32', 'score', 2));
   
-  // Ligne 2, Colonne 1 : Échoués
-  exportSvg.appendChild(createStatCell(0, cellHeight, failed, t('statsFailed'), '#f44336', '18', 'failed'));
+  // Ligne 2, Colonne 1 : Réussis
+  exportSvg.appendChild(createStatCell(0, cellHeight, passed, t('statsPassed'), '#4caf50', '18', 'passed'));
   
-  // Ligne 2, Colonne 2 : Non applicables
-  exportSvg.appendChild(createStatCell(cellWidth, cellHeight, notApplicable, t('statsNotApplicable'), '#9e9e9e', '18', 'notApplicable'));
+  // Ligne 2, Colonne 2 : Échoués
+  exportSvg.appendChild(createStatCell(cellWidth, cellHeight, failed, t('statsFailed'), '#f44336', '18', 'failed'));
+  
+  // Ligne 3, Colonne 1 : Non applicables
+  exportSvg.appendChild(createStatCell(0, cellHeight * 2, notApplicable, t('statsNotApplicable'), '#9e9e9e', '18', 'notApplicable'));
+  
+  // Ligne 3, Colonne 2 : Dérogations
+  exportSvg.appendChild(createStatCell(cellWidth, cellHeight * 2, derogation, t('statsDerogation'), '#ff9800', '18', 'derogation'));
   
   return exportSvg;
 }
@@ -875,7 +937,7 @@ async function downloadStatsAsPNG() {
   
   try {
     const gridWidth = 400;
-    const gridHeight = 200;
+    const gridHeight = 300; // 3 lignes au lieu de 2
     
     // Créer un canvas pour la conversion
     const canvas = document.createElement('canvas');
@@ -968,8 +1030,10 @@ async function downloadChartAsPNG() {
         legendData = JSON.parse(legendDataAttr);
       } catch (e) {}
     }
-    const legendHeight = legendData ? 60 : 0;
-    const totalHeight = svgHeight + legendHeight + 20;
+    // Calculer la hauteur de la légende en fonction du nombre d'items
+    const legendItemCount = legendData && legendData.items ? legendData.items.length : 0;
+    const legendHeight = legendItemCount > 0 ? legendItemCount * 25 + 10 : 0; // 25px par item + 10px de marge
+    const totalHeight = svgHeight + legendHeight + 20; // 20px de marge
     
     // Créer un canvas pour la conversion
     const canvas = document.createElement('canvas');
