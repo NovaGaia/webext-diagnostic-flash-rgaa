@@ -18,11 +18,37 @@ L'extension est prête à être testée ! Suivez ces étapes :
 
 #### Firefox
 
-1. Ouvrez `about:debugging`
-2. Cliquez sur **Ce Firefox** dans le menu de gauche
-3. Cliquez sur **Charger un module complémentaire temporaire**
-4. Naviguez jusqu'à ce dossier et sélectionnez `manifest.json`
-5. ✅ L'extension est chargée !
+Firefox nécessite Manifest V2 avec `background.scripts` au lieu de Manifest V3 avec `background.service_worker`.
+
+**Option 1 : Utiliser le script de basculement (recommandé)**
+
+```bash
+# Basculer vers le manifest Firefox
+pnpm run switch:firefox
+# ou
+npm run switch:firefox
+
+# Puis dans Firefox :
+# 1. Ouvrez `about:debugging`
+# 2. Cliquez sur **Ce Firefox** dans le menu de gauche
+# 3. Cliquez sur **Charger un module complémentaire temporaire**
+# 4. Naviguez jusqu'à ce dossier et sélectionnez `manifest.json`
+# 5. ✅ L'extension est chargée !
+
+# Pour revenir à Chrome :
+pnpm run switch:chrome
+# ou
+npm run switch:chrome
+```
+
+**Option 2 : Renommer manuellement**
+
+1. Renommez `manifest.json` en `manifest-chrome.json`
+2. Renommez `manifest-firefox.json` en `manifest.json`
+3. Chargez l'extension dans Firefox avec `manifest.json`
+4. Restaurez les noms originaux après les tests
+
+> **Note** : Firefox utilise Manifest V2 avec `background.scripts` et `browser_action` au lieu de Manifest V3 avec `background.service_worker` et `action`.
 
 ### Production
 
@@ -71,6 +97,7 @@ pnpm run generate-icons
 - **Export des résultats** : Téléchargement du diagramme circulaire et de la grille de statistiques en PNG
 - **Visualisations interactives** : Analyse des champs de formulaire et des alternatives textuelles avec mise en évidence visuelle
 - **Système d'icônes SVG** : Interface cohérente avec des icônes Heroicons
+- **Architecture modulaire** : Code organisé en modules séparés (CSS, visualisations, tests) pour une meilleure maintenabilité
 
 ## 📦 Versioning et Releases
 
@@ -114,27 +141,38 @@ Les packages sont automatiquement générés et attachés à chaque release GitH
 
 ```
 .
-├── manifest.json          # Manifest de l'extension (Manifest V3)
+├── manifest.json          # Manifest de l'extension pour Chrome (Manifest V3)
+├── manifest-firefox.json  # Manifest de l'extension pour Firefox (Manifest V3 avec background.scripts)
 ├── manifest-no-icons.json # Manifest alternatif sans icônes
 ├── package.json          # Configuration Node.js et scripts
 ├── background.js         # Service worker (background)
 ├── devtools.html         # Page d'entrée DevTools
 ├── devtools.js           # Création du panneau DevTools
-├── panel.html            # Interface du panneau DevTools
+├── panel.html            # Interface du panneau DevTools (HTML uniquement)
+├── panel.css             # Styles CSS du panneau (séparé du HTML)
 ├── panel.js              # Orchestration principale
 ├── utils/                # Utilitaires
 │   ├── i18n.js          # Système de traduction
+│   ├── icons.js         # Système d'icônes SVG Heroicons
 │   ├── ui.js             # Fonctions UI
 │   ├── stats.js          # Gestion des statistiques
 │   └── cleanup.js        # Nettoyage des visualisations
 ├── tests/                # Tests d'accessibilité
 │   ├── navigation/      # Tests de navigation
+│   │   └── keyboard-visualization.js  # Visualisation de la navigation clavier
 │   ├── langage/          # Tests de langage & interface
+│   │   ├── contrasts/    # Modules d'analyse des contrastes (divisés)
+│   │   ├── media-alternatives.js  # Test principal des alternatives média
+│   │   └── media-alternatives-visualization.js  # Visualisation des alternatives
 │   └── structuration/    # Tests de structuration
+│       ├── form-fields.js  # Test principal des champs de formulaire
+│       └── form-fields-visualization.js  # Visualisation des champs
 └── scripts/              # Scripts utilitaires
     ├── package-chrome.js # Script de packaging Chrome
     ├── package-firefox.js# Script de packaging Firefox
-    └── sync-version.js   # Synchronisation des versions
+    ├── sync-version.js   # Synchronisation des versions
+    ├── switch-to-firefox.js # Basculer vers manifest Firefox (développement)
+    └── switch-to-chrome.js  # Basculer vers manifest Chrome (développement)
 ```
 
 ## ✅ Tests d'accessibilité
@@ -173,6 +211,8 @@ pnpm run package:chrome    # Créer le package Chrome
 pnpm run package:firefox   # Créer le package Firefox
 pnpm run package           # Créer les deux packages
 pnpm run generate-icons    # Générer les icônes depuis SVG
+pnpm run switch:firefox    # Basculer vers manifest Firefox (développement)
+pnpm run switch:chrome     # Basculer vers manifest Chrome (développement)
 ```
 
 ## 📝 Licence

@@ -3,1823 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Diagnostic Flash RGAA</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      font-size: 13px;
-      padding: 20px;
-      background: #fff;
-      color: #333;
-    }
-    
-    .container {
-      max-width: 100%;
-    }
-    
-    h1 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #1a1a1a;
-    }
-    
-    .status {
-      padding: 15px;
-      background: #e8f5e9;
-      border-left: 4px solid #4caf50;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
-    
-    .status.active {
-      background: #fff3e0;
-      border-left-color: #ff9800;
-    }
-    
-    .button {
-      background: #1976d2;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
-    
-    .button:hover {
-      background: #1565c0;
-    }
-    
-    .button.secondary {
-      background: #757575;
-    }
-    
-    .button.secondary:hover {
-      background: #616161;
-    }
-    
-    .categories {
-      margin-top: 20px;
-    }
-    
-    .category {
-      margin-bottom: 15px;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .category-header {
-      background: #f5f5f5;
-      padding: 12px 15px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 500;
-      border-bottom: 1px solid #e0e0e0;
-      user-select: none;
-    }
-    
-    .category-header:hover {
-      background: #eeeeee;
-    }
-    
-    .category-header.active {
-      background: #e3f2fd;
-      border-bottom: 1px solid #1976d2;
-    }
-    
-    .category-header > span:first-child {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .category-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    
-    .category-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-    }
-    
-    /* Assurer un bon contraste pour les icônes de catégories en light mode */
-    .category-icon svg path {
-      stroke: #333;
-    }
-    
-    /* Assurer un bon contraste pour l'icône du header en light mode */
-    #header-icon svg path {
-      stroke: #1a1a1a;
-    }
-    
-    .category-arrow {
-      transition: transform 0.2s;
-      color: #666;
-    }
-    
-    .category-header.active .category-arrow {
-      transform: rotate(90deg);
-    }
-    
-    .category-content {
-      padding: 15px;
-      display: none;
-      background: #fafafa;
-    }
-    
-    .category-content.active {
-      display: block;
-    }
-    
-    .test-item {
-      padding: 10px;
-      margin-bottom: 10px;
-      background: white;
-      border-left: 3px solid #ddd;
-      border-radius: 3px;
-    }
-    
-    .test-item:last-child {
-      margin-bottom: 0;
-    }
-    
-    .test-item.passed {
-      border-left-color: #4caf50;
-    }
-    
-    .test-item.failed {
-      border-left-color: #f44336;
-    }
-    
-    .test-item.not-applicable {
-      border-left-color: #9e9e9e;
-      opacity: 0.7;
-    }
-    
-    .test-item.warning {
-      border-left-color: #ff9800;
-    }
-    
-    .test-name {
-      font-weight: 500;
-      margin-bottom: 5px;
-    }
-    
-    .test-description {
-      font-size: 12px;
-      color: #666;
-    }
-    
-    .test-results {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #eee;
-      font-size: 12px;
-    }
-    
-    .test-actions {
-      margin-top: 10px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-    
-    .checkbox-container input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-    
-    .checkbox-label {
-      font-size: 13px;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      line-height: 1.4;
-    }
-    
-    .checkbox-label input[type="checkbox"] {
-      cursor: pointer;
-      margin: 0;
-      flex-shrink: 0;
-    }
-    
-    .test-controls {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 0;
-    }
-    
-    .test-validation {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .validation-option {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      line-height: 1.4;
-    }
-    
-    .validation-option input[type="radio"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      margin: 0;
-      flex-shrink: 0;
-    }
-    
-    .validation-option label {
-      font-size: 13px;
-      user-select: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      line-height: 1.4;
-    }
-    
-    .button-small {
-      background: #1976d2;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 13px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      box-sizing: border-box;
-    }
-    
-    .button-small:hover {
-      background: #1565c0;
-    }
-    
-    .auto-check {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 8px;
-      font-size: 12px;
-    }
-    
-    .auto-check.passed {
-      color: #4caf50;
-    }
-    
-    .auto-check.failed {
-      color: #f44336;
-    }
-    
-    .auto-check.warning {
-      color: #ff9800;
-    }
-    
-    /* Bloc détection titre/H1 */
-    .page-title-detected {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-    
-    /* Bloc détection langue */
-    .language-detected {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-    
-    /* Popin modal */
-    .popin-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .popin-overlay.active {
-      display: flex;
-    }
-    
-    .popin-modal {
-      background: white;
-      border-radius: 8px;
-      padding: 0;
-      max-width: 500px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      z-index: 10001;
-    }
-    
-    .popin-header {
-      padding: 20px 20px 15px 20px;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .popin-close {
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: #666;
-      cursor: pointer;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-    
-    .popin-close:hover {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-    
-    .popin-body {
-      padding: 20px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #555;
-      white-space: pre-line;
-    }
-    
-    .popin-footer {
-      padding: 15px 20px;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      justify-content: flex-end;
-    }
-    
-    /* Documentation bloc */
-    .test-documentation {
-      margin-top: 15px;
-      border-top: 1px solid #e0e0e0;
-      padding-top: 15px;
-    }
-    
-    .doc-toggle {
-      background: none;
-      border: none;
-      padding: 8px 0;
-      cursor: pointer;
-      font-size: 13px;
-      color: #1976d2;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      text-align: left;
-      transition: color 0.2s;
-    }
-    
-    .doc-toggle:hover {
-      color: #1565c0;
-      text-decoration: underline;
-    }
-    
-    .doc-toggle-icon {
-      font-size: 12px;
-      transition: transform 0.2s;
-      display: inline-block;
-    }
-    
-    .doc-content {
-      margin-top: 10px;
-      padding: 15px;
-      background: #f9f9f9;
-      border-radius: 4px;
-      border-left: 3px solid #1976d2;
-    }
-    
-    .doc-section {
-      margin-bottom: 20px;
-    }
-    
-    .doc-section:last-child {
-      margin-bottom: 0;
-    }
-    
-    .doc-section-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-      margin-top: 0;
-    }
-    
-    .doc-section-content {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #555;
-    }
-    
-    .doc-section-content ul,
-    .doc-section-content ol {
-      margin: 8px 0;
-      padding-left: 20px;
-    }
-    
-    .doc-section-content li {
-      margin-bottom: 6px;
-    }
-    
-    .doc-section-content a {
-      color: #1976d2;
-      text-decoration: underline;
-    }
-    
-    .doc-section-content a:hover {
-      text-decoration: underline;
-      color: #1565c0;
-    }
-    
-    .doc-section-content a.external-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .external-link-icon-inline {
-      display: inline-block;
-      font-size: 11px;
-      line-height: 1;
-      margin-left: 2px;
-      color: #1976d2;
-      vertical-align: middle;
-    }
-    
-    .doc-section-content a.external-link:hover .external-link-icon-inline {
-      color: #1565c0;
-    }
-    
-    .doc-section-content code {
-      background: #f0f0f0;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      color: #d63384;
-    }
-    
-    .doc-section-content p {
-      margin: 0 0 12px 0;
-    }
-    
-    .doc-section-content p:last-child {
-      margin-bottom: 0;
-    }
-    
-    /* Liste horizontale des critères RGAA */
-    .rgaa-criteria-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 8px 0;
-    }
-    
-    .rgaa-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 12px;
-      background: #f0f0f0;
-      border-radius: 16px;
-      text-decoration: none;
-      color: #333;
-      font-size: 13px;
-      font-weight: 500;
-      transition: background-color 0.2s, color 0.2s;
-      white-space: nowrap;
-    }
-    
-    .rgaa-badge:hover {
-      background: #e0e0e0;
-      color: #1976d2;
-    }
-    
-    .external-link-icon {
-      display: inline-block;
-      font-size: 11px;
-      line-height: 1;
-      opacity: 0.7;
-      margin-left: 2px;
-    }
-    
-    .rgaa-badge:hover .external-link-icon {
-      opacity: 1;
-    }
-    
-    /* Analyse des contrastes */
-    .contrast-analysis {
-      margin-top: 15px;
-      padding: 15px;
-      background: #fff;
-      border-radius: 4px;
-      border: 1px solid #e0e0e0;
-    }
-    
-    .contrast-controls {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .control-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-    }
-    
-    .control-label span:first-child {
-      color: #666;
-    }
-    
-    .control-select {
-      padding: 4px 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 13px;
-      background: white;
-      cursor: pointer;
-    }
-    
-    .contrast-sections {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    .contrast-section {
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .contrast-section-title {
-      margin: 0;
-      padding: 10px 15px;
-      background: #f5f5f5;
-      font-size: 14px;
-      font-weight: 600;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .contrast-table {
-      font-size: 12px;
-    }
-    
-    .contrast-table-header {
-      display: grid;
-      grid-template-columns: 120px 80px 1fr;
-      padding: 8px 15px;
-      background: #f9f9f9;
-      font-weight: 600;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .contrast-table-body {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    
-    .contrast-row {
-      display: grid;
-      grid-template-columns: 120px 80px 1fr;
-      padding: 8px 15px;
-      border-bottom: 1px solid #f0f0f0;
-      align-items: center;
-      transition: background-color 0.2s;
-    }
-    
-    .size-col {
-      font-size: 12px;
-      color: #666;
-    }
-    
-    .contrast-row:last-child {
-      border-bottom: none;
-    }
-    
-    .contrast-row:hover {
-      background-color: #f5f5f5;
-    }
-    
-    .contrast-row.highlight-active {
-      background-color: #fff3cd;
-      border-left: 3px solid #f44336;
-    }
-    
-    .contrast-col {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .check-icon {
-      color: #4caf50;
-      font-weight: bold;
-    }
-    
-    .fail-icon {
-      color: #f44336;
-      font-weight: bold;
-    }
-    
-    .contrast-ratio {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-    }
-    
-    .elements-col {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .color-swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-    
-    .element-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .element-size {
-      font-weight: 500;
-      color: #666;
-      min-width: 50px;
-    }
-    
-    .element-tags {
-      color: #333;
-    }
-    
-    .contrast-summary {
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 2px solid #e0e0e0;
-    }
-    
-    .contrast-summary-title {
-      font-weight: 600;
-      margin-bottom: 10px;
-      font-size: 13px;
-    }
-    
-    .contrast-summary-table {
-      display: grid;
-      grid-template-columns: 80px 100px 60px 60px;
-      gap: 10px;
-      font-size: 12px;
-    }
-    
-    .summary-row {
-      display: contents;
-    }
-    
-    .summary-row.header {
-      font-weight: 600;
-      padding-bottom: 5px;
-      border-bottom: 1px solid #e0e0e0;
-      margin-bottom: 5px;
-    }
-    
-    .summary-row > div {
-      padding: 6px 0;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 30px;
-      color: #999;
-      font-style: italic;
-    }
-    
-    .stats {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      font-size: 12px;
-    }
-    
-    .stat {
-      padding: 12px 12px;
-      background: #f5f5f5;
-      border-radius: 4px;
-      flex: 1;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 70px;
-    }
-    
-    .pie-chart-container {
-      margin-bottom: 15px;
-    }
-    
-    .pie-chart-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .pie-chart-legend-color {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    
-    .stat-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      line-height: 1;
-    }
-    
-    .stat-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      width: 20px;
-      height: 20px;
-      line-height: 1;
-    }
-    
-    .stat-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      flex-shrink: 0;
-      vertical-align: middle;
-    }
-    
-    /* Assurer un bon contraste pour les icônes de statistiques en light mode */
-    .stat-icon svg path {
-      stroke: currentColor;
-    }
-    
-    /* Couleurs spécifiques pour les icônes de statistiques en light mode */
-    #stat-icon-total svg path,
-    #stat-icon-total-scores svg path {
-      stroke: #333;
-    }
-    
-    #stat-icon-passed svg path,
-    #stat-icon-passed-scores svg path {
-      stroke: #4caf50;
-    }
-    
-    #stat-icon-failed svg path,
-    #stat-icon-failed-scores svg path {
-      stroke: #f44336;
-    }
-    
-    #stat-icon-not-applicable svg path,
-    #stat-icon-not-applicable-scores svg path {
-      stroke: #616161;
-    }
-    
-    #stat-icon-score svg path,
-    #stat-icon-score-scores svg path {
-      stroke: #1976d2;
-    }
-    
-    .stat-value {
-      font-size: 18px;
-      font-weight: bold;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-    }
-    
-    .stat-label {
-      color: #333;
-      font-size: 11px;
-      text-align: center;
-      font-weight: 500;
-    }
-    
-    /* Amélioration du contraste pour les valeurs "Non applicables" */
-    .stat-value[style*="color: #9e9e9e"] {
-      color: #616161 !important;
-    }
-    
-    /* Analyse de la hiérarchie des titres */
-    .headings-hierarchy-analysis {
-      margin-top: 15px;
-      padding: 15px;
-      background: #fff;
-      border-radius: 4px;
-      border: 1px solid #e0e0e0;
-    }
-    
-    .headings-hierarchy-sections {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    .headings-hierarchy-section {
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .headings-hierarchy-section-title {
-      margin: 0;
-      padding: 10px 15px;
-      background: #f5f5f5;
-      font-size: 14px;
-      font-weight: 600;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .headings-tree,
-    .landmarks-tree {
-      padding: 10px 15px;
-      font-size: 13px;
-      font-family: 'Courier New', monospace;
-      background: #fafafa;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    
-    .headings-tree-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 4px 0;
-      border-left: 2px solid transparent;
-      transition: background-color 0.2s;
-    }
-    
-    .headings-tree-item.headings-tree-error {
-      background-color: rgba(244, 67, 54, 0.15) !important;
-      border-left-color: #f44336 !important;
-      padding-left: 8px;
-      margin-left: -8px;
-    }
-    
-    .headings-tree-item.headings-tree-error .headings-tree-level,
-    .headings-tree-item.headings-tree-error .headings-tree-text {
-      color: #d32f2f;
-      font-weight: 600;
-    }
-    
-    .headings-tree-item:hover {
-      background-color: #f0f0f0;
-    }
-    
-    .headings-tree-item.headings-tree-error:hover {
-      background-color: rgba(244, 67, 54, 0.25) !important;
-    }
-    
-    .headings-tree-level {
-      display: inline-block;
-      min-width: 20px;
-      font-weight: 600;
-      color: #1976d2;
-    }
-    
-    .headings-tree-text {
-      flex: 1;
-      color: #333;
-      word-break: break-word;
-    }
-    
-    .headings-tree-empty,
-    .landmarks-tree-empty {
-      padding: 20px;
-      text-align: center;
-      color: #999;
-      font-style: italic;
-    }
-    
-    .landmarks-tree-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 0;
-      border-left: 2px solid transparent;
-      transition: background-color 0.2s;
-    }
-    
-    .landmarks-tree-item:hover {
-      background-color: #f0f0f0;
-    }
-    
-    .landmark-nested {
-      border-left-color: #ff9800;
-      padding-left: 8px;
-    }
-    
-    .landmark-error {
-      background-color: rgba(244, 67, 54, 0.15) !important;
-      border-left-color: #f44336 !important;
-      padding-left: 8px;
-    }
-    
-    .landmark-error .landmarks-tree-label,
-    .landmark-error .landmarks-tree-role {
-      color: #d32f2f;
-      font-weight: 600;
-    }
-    
-    .landmarks-tree-label {
-      font-weight: 500;
-      color: #333;
-    }
-    
-    .landmarks-tree-role {
-      color: #666;
-      font-size: 12px;
-      font-family: 'Courier New', monospace;
-    }
-    
-    /* Headers des sections avec boutons toggle */
-    .headings-hierarchy-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    
-    .headings-hierarchy-section-title {
-      margin: 0;
-      flex: 1;
-    }
-    
-    .button-toggle-headings,
-    .button-toggle-landmarks {
-      background: transparent;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 4px 8px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 32px;
-      height: 28px;
-    }
-    
-    .button-toggle-headings:hover,
-    .button-toggle-landmarks:hover {
-      background-color: #f5f5f5;
-      border-color: #999;
-    }
-    
-    .button-toggle-headings.active,
-    .button-toggle-landmarks.active {
-      background-color: #1976d2;
-      border-color: #1976d2;
-      color: white;
-    }
-    
-    .button-toggle-headings.active .button-toggle-icon,
-    .button-toggle-landmarks.active .button-toggle-icon {
-      color: white;
-    }
-    
-    .button-toggle-icon {
-      font-size: 16px;
-      line-height: 1;
-    }
-    
-    /* Tableau récapitulatif */
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    
-    .summary-table thead {
-      background: #f5f5f5;
-    }
-    
-    .summary-table th {
-      padding: 12px 15px;
-      text-align: left;
-      font-weight: 600;
-      border-bottom: 2px solid #e0e0e0;
-      font-size: 13px;
-    }
-    
-    .summary-header-criteria {
-      width: 70%;
-    }
-    
-    .summary-header-result {
-      width: 30%;
-      text-align: center;
-    }
-    
-    .summary-table tbody tr {
-      border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .summary-table tbody tr:last-child {
-      border-bottom: none;
-    }
-    
-    .summary-table tbody tr:hover {
-      background: #fafafa;
-    }
-    
-    .summary-table td {
-      padding: 12px 15px;
-      font-size: 13px;
-      vertical-align: top;
-    }
-    
-    .summary-criteria {
-      text-align: left;
-      line-height: 1.5;
-    }
-    
-    .summary-result {
-      text-align: center;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-    
-    .summary-ok {
-      color: #4caf50;
-      background: #e8f5e9;
-    }
-    
-    .summary-ko {
-      color: #f44336;
-      background: #ffebee;
-    }
-    
-    .summary-na {
-      color: #616161;
-      background: #f5f5f5;
-      font-weight: 600;
-    }
-    
-    /* Amélioration du contraste pour OK et KO en light mode */
-    .summary-ok {
-      font-weight: 600;
-    }
-    
-    .summary-ko {
-      font-weight: 600;
-    }
-    
-    .summary-pending {
-      color: #999;
-      background: #fafafa;
-    }
-    
-    /* Amélioration du contraste pour le score en light mode */
-    #scoreValue[style*="color: #1976d2"],
-    #scoreValueScores[style*="color: #1976d2"] {
-      color: #1565c0 !important;
-    }
-    
-    /* Onglets */
-    .tabs {
-      margin-bottom: 20px;
-      border-bottom: 2px solid #e0e0e0;
-    }
-    
-    .tabs-list {
-      display: flex;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      gap: 0;
-    }
-    
-    .tab-item {
-      margin: 0;
-    }
-    
-    .tab-button {
-      background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      padding: 12px 20px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #666;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: -2px;
-    }
-    
-    .tab-button:hover {
-      color: #1976d2;
-      background: #f5f5f5;
-    }
-    
-    .tab-button.active {
-      color: #1976d2;
-      border-bottom-color: #1976d2;
-      background: transparent;
-    }
-    
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
-    }
-    
-    /* ============================================
-       DARK MODE - Détection de la préférence système
-       ============================================ */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: #1e1e1e;
-        color: #e0e0e0;
-      }
-      
-      h1 {
-        color: #ffffff;
-      }
-      
-      #header-icon svg {
-        color: #ffffff;
-      }
-      
-      #header-icon svg path {
-        stroke: #ffffff !important;
-      }
-      
-      #version-display {
-        color: #b0b0b0;
-      }
-      
-      .status {
-        background: #2d4a2d;
-        border-left-color: #4caf50;
-      }
-      
-      .status.active {
-        background: #4a3d1f;
-        border-left-color: #ff9800;
-      }
-      
-      .button {
-        background: #1976d2;
-        color: white;
-      }
-      
-      .button:hover {
-        background: #1565c0;
-      }
-      
-      .button.secondary {
-        background: #616161;
-      }
-      
-      .button.secondary:hover {
-        background: #757575;
-      }
-      
-      .category {
-        border: 1px solid #3a3a3a;
-      }
-      
-      .category-header {
-        background: #2a2a2a;
-        border-bottom: 1px solid #3a3a3a;
-      }
-      
-      .category-header:hover {
-        background: #333333;
-      }
-      
-      .category-header.active {
-        background: #1a3a5a;
-        border-bottom: 1px solid #1976d2;
-      }
-      
-      .category-content {
-        background: #252525;
-      }
-      
-      .test-item {
-        background: #2a2a2a;
-        border-left: 3px solid #444;
-      }
-      
-      .test-description {
-        color: #d0d0d0;
-      }
-      
-      .test-results {
-        border-top: 1px solid #3a3a3a;
-      }
-      
-      .element-size {
-        color: #b0b0b0;
-      }
-      
-      .element-tags {
-        color: #d0d0d0;
-      }
-      
-      .empty-state {
-        color: #b0b0b0;
-      }
-      
-      .auto-check {
-        color: #d0d0d0;
-      }
-      
-      .auto-check.passed {
-        color: #81c784;
-      }
-      
-      .auto-check.failed {
-        color: #e57373;
-      }
-      
-      .auto-check.warning {
-        color: #ffb74d;
-      }
-      
-      .button-small {
-        background: #1976d2;
-        color: white;
-      }
-      
-      .button-small:hover {
-        background: #1565c0;
-      }
-      
-      .page-title-detected,
-      .language-detected {
-        background-color: #2a2a2a;
-        color: #e0e0e0;
-      }
-      
-      .popin-overlay {
-        background-color: rgba(0, 0, 0, 0.7);
-      }
-      
-      .popin-modal {
-        background: #2a2a2a;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      }
-      
-      .popin-header {
-        border-bottom: 1px solid #3a3a3a;
-        color: #ffffff;
-      }
-      
-      .popin-close {
-        color: #b0b0b0;
-      }
-      
-      .popin-close:hover {
-        background-color: #3a3a3a;
-        color: #ffffff;
-      }
-      
-      .popin-body {
-        color: #d0d0d0;
-      }
-      
-      .popin-footer {
-        border-top: 1px solid #3a3a3a;
-      }
-      
-      .test-documentation {
-        border-top: 1px solid #3a3a3a;
-      }
-      
-      .doc-toggle {
-        color: #64b5f6;
-      }
-      
-      .doc-toggle:hover {
-        color: #90caf9;
-      }
-      
-      .doc-content {
-        background: #2a2a2a;
-        border-left: 3px solid #1976d2;
-      }
-      
-      .doc-section-title {
-        color: #ffffff;
-      }
-      
-      .doc-section-content {
-        color: #d0d0d0;
-      }
-      
-      .doc-section-content a {
-        color: #64b5f6;
-      }
-      
-      .doc-section-content a:hover {
-        color: #90caf9;
-      }
-      
-      .doc-section-content code {
-        background: #1a1a1a;
-        color: #ffffff;
-      }
-      
-      .summary-table {
-        border: 1px solid #3a3a3a;
-      }
-      
-      .summary-table th {
-        background: #2a2a2a;
-        border-bottom: 2px solid #3a3a3a;
-        color: #ffffff;
-      }
-      
-      .summary-table td {
-        border-bottom: 1px solid #3a3a3a;
-      }
-      
-      .summary-table tr:hover {
-        background: #333333;
-      }
-      
-      .pie-chart-container {
-        background: #2a2a2a !important;
-      }
-      
-      /* Amélioration du contraste pour le titre "Répartition des résultats" */
-      .pie-chart-container > div:first-child > div:first-child {
-        color: #ffffff !important;
-      }
-      
-      /* Amélioration du contraste pour la légende du pie chart */
-      #pieChartLegend {
-        color: #ffffff !important;
-      }
-      
-      #pieChartLegend span {
-        color: #ffffff !important;
-      }
-      
-      .pie-chart-legend-item {
-        color: #ffffff !important;
-      }
-      
-      .pie-chart-legend-item span {
-        color: #ffffff !important;
-      }
-      
-      /* Amélioration du contraste pour les résultats du tableau en dark mode */
-      .summary-ok {
-        color: #81c784 !important;
-        background: #1b5e20 !important;
-        font-weight: 600;
-      }
-      
-      .summary-ko {
-        color: #ffcdd2 !important;
-        background: #b71c1c !important;
-        font-weight: 600;
-      }
-      
-      .summary-na {
-        color: #e0e0e0 !important;
-        background: #424242 !important;
-        font-weight: 600;
-      }
-      
-      .summary-pending {
-        color: #b0b0b0 !important;
-        background: #2a2a2a !important;
-      }
-      
-      /* Amélioration du contraste pour les cellules du tableau */
-      .summary-table td {
-        color: #e0e0e0;
-      }
-      
-      .summary-table tbody tr {
-        background: #2a2a2a;
-      }
-      
-      .summary-table tbody tr:hover {
-        background: #333333;
-      }
-      
-      .stats {
-        background: #252525;
-      }
-      
-      .stat {
-        background: #2a2a2a;
-        border-right: 1px solid #3a3a3a;
-      }
-      
-      .stat-label {
-        color: #d0d0d0;
-        font-weight: 500;
-      }
-      
-      /* Amélioration du contraste pour les valeurs en dark mode */
-      .stat-value {
-        color: #ffffff;
-      }
-      
-      /* Valeurs spécifiques avec meilleur contraste */
-      .stat-value[style*="color: #4caf50"] {
-        color: #81c784 !important;
-      }
-      
-      .stat-value[style*="color: #f44336"] {
-        color: #e57373 !important;
-      }
-      
-      .stat-value[style*="color: #9e9e9e"] {
-        color: #bdbdbd !important;
-      }
-      
-      .stat-value[style*="color: #1976d2"] {
-        color: #64b5f6 !important;
-      }
-      
-      /* Amélioration du contraste pour les scores selon leur valeur en dark mode */
-      .stat-value[style*="color: #8bc34a"] {
-        color: #a5d6a7 !important;
-      }
-      
-      .stat-value[style*="color: #ff9800"] {
-        color: #ffb74d !important;
-      }
-      
-      /* Amélioration du contraste pour les icônes SVG */
-      .stat-icon svg {
-        opacity: 1;
-      }
-      
-      .stat-icon svg path {
-        stroke: currentColor;
-      }
-      
-      /* Forcer les couleurs des icônes de statistiques en dark mode */
-      #stat-icon-total svg path,
-      #stat-icon-total-scores svg path {
-        stroke: #ffffff !important;
-      }
-      
-      #stat-icon-passed svg path,
-      #stat-icon-passed-scores svg path {
-        stroke: #81c784 !important;
-      }
-      
-      #stat-icon-failed svg path,
-      #stat-icon-failed-scores svg path {
-        stroke: #e57373 !important;
-      }
-      
-      #stat-icon-not-applicable svg path,
-      #stat-icon-not-applicable-scores svg path {
-        stroke: #bdbdbd !important;
-      }
-      
-      #stat-icon-score svg path,
-      #stat-icon-score-scores svg path {
-        stroke: #64b5f6 !important;
-      }
-      
-      /* Amélioration du contraste pour les icônes de catégories */
-      .category-icon svg path {
-        stroke: #ffffff !important;
-      }
-      
-      /* Amélioration du contraste pour les textes des catégories */
-      .category-header {
-        color: #ffffff;
-      }
-      
-      .test-name {
-        color: #ffffff;
-      }
-      
-      .category-arrow {
-        color: #b0b0b0;
-      }
-      
-      /* Amélioration du contraste pour le compteur de progression */
-      .category-progress-counter {
-        color: #ffffff !important;
-      }
-      
-      .category-progress-counter[style*="color: #4caf50"] {
-        color: #81c784 !important;
-      }
-      
-      .tabs {
-        border-bottom: 1px solid #3a3a3a;
-      }
-      
-      .tab-button {
-        color: #d0d0d0;
-      }
-      
-      .tab-button:hover {
-        color: #64b5f6;
-        background: #2a2a2a;
-      }
-      
-      .tab-button.active {
-        color: #64b5f6;
-        border-bottom-color: #64b5f6;
-      }
-      
-      #version-display {
-        color: #d0d0d0;
-      }
-      
-      /* Amélioration du contraste pour tous les textes */
-      .test-results {
-        color: #e0e0e0;
-      }
-      
-      .checkbox-label {
-        color: #e0e0e0;
-      }
-      
-      .validation-option label {
-        color: #e0e0e0;
-      }
-      
-      .pie-chart-legend-item {
-        color: #e0e0e0;
-      }
-      
-      .contrast-summary-title {
-        color: #ffffff;
-      }
-      
-      .element-info {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* ============================================
-       RESPONSIVE DESIGN
-       ============================================ */
-    @media (max-width: 768px) {
-      body {
-        padding: 15px;
-        font-size: 12px;
-      }
-      
-      h1 {
-        font-size: 16px;
-        margin-bottom: 15px;
-      }
-      
-      .stats {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      
-      .stat {
-        flex: 1 1 calc(50% - 10px);
-        min-width: 120px;
-        padding: 10px 8px;
-      }
-      
-      .stat-value {
-        font-size: 16px;
-      }
-      
-      .stat-label {
-        font-size: 10px;
-      }
-      
-      .button {
-        padding: 8px 16px;
-        font-size: 13px;
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-      }
-      
-      .button-small {
-        padding: 5px 10px;
-        font-size: 12px;
-      }
-      
-      .category-header {
-        padding: 10px 12px;
-        font-size: 13px;
-      }
-      
-      .test-item {
-        padding: 12px;
-      }
-      
-      .test-actions {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .test-validation {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .tabs-list {
-        flex-wrap: wrap;
-      }
-      
-      .tab-button {
-        padding: 10px 15px;
-        font-size: 13px;
-      }
-      
-      .popin-modal {
-        width: 95%;
-        max-height: 90vh;
-      }
-      
-      .summary-table {
-        font-size: 11px;
-      }
-      
-      .summary-table th,
-      .summary-table td {
-        padding: 8px 6px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-        font-size: 11px;
-      }
-      
-      h1 {
-        font-size: 14px;
-        margin-bottom: 10px;
-      }
-      
-      .stats {
-        flex-direction: column;
-      }
-      
-      .stat {
-        flex: 1 1 100%;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-        padding: 12px 10px;
-      }
-      
-      @media (prefers-color-scheme: dark) {
-        .stat {
-          border-bottom: 1px solid #3a3a3a;
-        }
-      }
-      
-      .stat:last-child {
-        border-bottom: none;
-      }
-      
-      .stat-row {
-        gap: 6px;
-      }
-      
-      .stat-value {
-        font-size: 14px;
-      }
-      
-      .stat-label {
-        font-size: 9px;
-      }
-      
-      .category-header {
-        padding: 8px 10px;
-        font-size: 12px;
-      }
-      
-      .test-item {
-        padding: 10px;
-      }
-      
-      .test-name {
-        font-size: 13px;
-      }
-      
-      .test-description {
-        font-size: 11px;
-      }
-      
-      .tab-button {
-        padding: 8px 12px;
-        font-size: 12px;
-      }
-      
-      .summary-table {
-        font-size: 10px;
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-      
-      .summary-table thead,
-      .summary-table tbody,
-      .summary-table tr {
-        display: block;
-      }
-      
-      .summary-table th,
-      .summary-table td {
-        display: block;
-        text-align: left;
-        padding: 8px;
-        border-bottom: 1px solid #3a3a3a;
-      }
-      
-      .summary-table th {
-        border-bottom: 2px solid #3a3a3a;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="panel.css">
 </head>
 <body>
   <div class="container">
@@ -1828,7 +12,7 @@
         <span id="header-icon" style="display: flex; align-items: center;"></span>
         Diagnostic Flash RGAA
       </h1>
-      <span id="version-display" style="font-size: 11px; color: #666; font-weight: normal;">v<span id="version-number">-</span></span>
+      <span id="version-display" style="font-size: 11px; color: var(--color-text-tertiary); font-weight: normal;">v<span id="version-number">-</span></span>
     </div>
     
     <!-- Onglets -->
@@ -1839,6 +23,9 @@
         </li>
         <li class="tab-item">
           <button class="tab-button" data-tab="scores">Scores</button>
+        </li>
+        <li class="tab-item">
+          <button class="tab-button" data-tab="informations">Informations</button>
         </li>
       </ul>
     </div>
@@ -1856,28 +43,35 @@
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-passed"></div>
-            <div class="stat-value" id="passedTests" style="color: #4caf50;">0</div>
+            <div class="stat-value" id="passedTests" style="color: var(--color-success);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsPassed">Réussis</div>
         </div>
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-failed"></div>
-            <div class="stat-value" id="failedTests" style="color: #f44336;">0</div>
+            <div class="stat-value" id="failedTests" style="color: var(--color-error);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsFailed">Échoués</div>
         </div>
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-not-applicable"></div>
-            <div class="stat-value" id="notApplicableTests" style="color: #9e9e9e;">0</div>
+            <div class="stat-value" id="notApplicableTests" style="color: var(--color-not-applicable);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsNotApplicable">Non applicables</div>
         </div>
         <div class="stat">
           <div class="stat-row">
+            <div class="stat-icon" id="stat-icon-derogation"></div>
+            <div class="stat-value" id="derogationTests" style="color: var(--color-warning);">0</div>
+          </div>
+          <div class="stat-label" data-i18n="statsDerogation">Dérogations</div>
+        </div>
+        <div class="stat">
+          <div class="stat-row">
             <div class="stat-icon" id="stat-icon-score"></div>
-            <div class="stat-value" id="scoreValue" style="color: #1976d2; font-size: 24px; font-weight: bold;">0</div>
+            <div class="stat-value" id="scoreValue" style="color: var(--color-primary); font-size: 24px; font-weight: bold;">0</div>
           </div>
           <div class="stat-label" data-i18n="statsScore">Score / 100</div>
         </div>
@@ -1940,35 +134,42 @@
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-passed-scores"></div>
-            <div class="stat-value" id="passedTestsScores" style="color: #4caf50;">0</div>
+            <div class="stat-value" id="passedTestsScores" style="color: var(--color-success);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsPassed">Réussis</div>
         </div>
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-failed-scores"></div>
-            <div class="stat-value" id="failedTestsScores" style="color: #f44336;">0</div>
+            <div class="stat-value" id="failedTestsScores" style="color: var(--color-error);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsFailed">Échoués</div>
         </div>
         <div class="stat">
           <div class="stat-row">
             <div class="stat-icon" id="stat-icon-not-applicable-scores"></div>
-            <div class="stat-value" id="notApplicableTestsScores" style="color: #9e9e9e;">0</div>
+            <div class="stat-value" id="notApplicableTestsScores" style="color: var(--color-not-applicable);">0</div>
           </div>
           <div class="stat-label" data-i18n="statsNotApplicable">Non applicables</div>
         </div>
         <div class="stat">
           <div class="stat-row">
+            <div class="stat-icon" id="stat-icon-derogation-scores"></div>
+            <div class="stat-value" id="derogationTestsScores" style="color: var(--color-warning);">0</div>
+          </div>
+          <div class="stat-label" data-i18n="statsDerogation">Dérogations</div>
+        </div>
+        <div class="stat">
+          <div class="stat-row">
             <div class="stat-icon" id="stat-icon-score-scores"></div>
-            <div class="stat-value" id="scoreValueScores" style="color: #1976d2; font-size: 24px; font-weight: bold;">0</div>
+            <div class="stat-value" id="scoreValueScores" style="color: var(--color-primary); font-size: 24px; font-weight: bold;">0</div>
           </div>
           <div class="stat-label" data-i18n="statsScore">Score / 100</div>
         </div>
         <button class="button-small" id="downloadStatsBtn" style="position: absolute; top: 0; right: 0; font-size: 18px; padding: 8px 12px; line-height: 1; display: flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px;" title="Télécharger les statistiques (PNG transparent)" aria-label="Télécharger la grille de statistiques au format PNG transparent"></button>
       </div>
       
-      <div class="pie-chart-container" style="margin-bottom: 15px; padding: 15px; background: #f5f5f5; border-radius: 4px; text-align: center;">
+      <div class="pie-chart-container" style="margin-bottom: 15px; padding: 15px; background: var(--color-bg-tertiary); border-radius: 4px; text-align: center;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <div style="font-size: 13px; font-weight: 600;" data-i18n="statsDistribution">Répartition des résultats</div>
           <div style="display: flex; gap: 8px; align-items: center;">
@@ -1984,6 +185,159 @@
       </div>
       
       <div id="summary-table-container" style="margin-bottom: 20px; overflow-x: auto;"></div>
+    </div>
+    
+    <!-- Onglet Informations -->
+    <div class="tab-content" id="tab-informations">
+      <div class="info-content">
+        <section class="info-section">
+          <h2 class="info-title">Qu'est-ce que le diagnostic flash ?</h2>
+          <p class="info-text">
+            Le <strong>diagnostic flash</strong> permet d'estimer de manière <strong>rapide et partielle</strong> l'accessibilité d'un site ou d'un service en ligne, sans avoir d'expertise particulière.
+          </p>
+          <p class="info-text">
+            Il est inutile de faire un audit de conformité au RGAA (Référentiel général d'amélioration de l'accessibilité) tant que tous ces critères ne sont pas respectés.
+          </p>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Les trois thématiques</h2>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-navigation"></span>
+              Navigation & utilisation
+            </h3>
+            <p class="info-text">
+              Cette thématique vérifie que le site est utilisable par tous, indépendamment du dispositif ou de la méthode de navigation. Elle couvre :
+            </p>
+            <ul class="info-list">
+              <li>L'adaptation à toutes les tailles d'écran (responsive design)</li>
+              <li>La navigation au clavier et la visibilité du focus</li>
+              <li>La présence de plusieurs moyens de navigation</li>
+              <li>L'accessibilité des fichiers téléchargeables</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour garantir que tous les utilisateurs, y compris ceux utilisant des aides techniques (lecteurs d'écran, navigation au clavier), puissent accéder et utiliser le site efficacement.
+            </p>
+          </div>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-langage"></span>
+              Langage & interface
+            </h3>
+            <p class="info-text">
+              Cette thématique s'assure que les contenus sont compréhensibles et utilisables par tous. Elle vérifie :
+            </p>
+            <ul class="info-list">
+              <li>Les contrastes de couleurs (texte et éléments interactifs)</li>
+              <li>L'information par la couleur (non exclusive)</li>
+              <li>Les alternatives textuelles pour les médias (images, vidéos, audio)</li>
+              <li>La définition de la langue principale</li>
+              <li>La clarté des liens</li>
+              <li>La possibilité d'agrandir le texte jusqu'à 200%</li>
+              <li>Le contrôle des animations et sons</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour permettre à tous les utilisateurs de percevoir, comprendre et interagir avec les contenus, quelles que soient leurs capacités visuelles, auditives ou cognitives.
+            </p>
+          </div>
+          
+          <div class="info-theme">
+            <h3 class="info-theme-title">
+              <span class="category-icon" id="category-icon-info-structuration"></span>
+              Structuration de l'information
+            </h3>
+            <p class="info-text">
+              Cette thématique vérifie que l'information est bien organisée et structurée. Elle contrôle :
+            </p>
+            <ul class="info-list">
+              <li>L'unicité et la pertinence du titre de page</li>
+              <li>La hiérarchie complète et cohérente des titres (H1, H2, H3...)</li>
+              <li>L'association claire des champs de formulaire avec leurs intitulés</li>
+              <li>Les informations relatives aux fichiers téléchargeables (format, taille, langue)</li>
+            </ul>
+            <p class="info-text">
+              <strong>Pourquoi ?</strong> Pour permettre une navigation efficace et une compréhension claire de la structure du contenu, notamment pour les utilisateurs de lecteurs d'écran qui naviguent de titre en titre.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Diagnostic flash vs Audit RGAA complet</h2>
+          
+          <div class="info-comparison">
+            <div class="info-comparison-item">
+              <h3 class="info-comparison-title">Diagnostic flash</h3>
+              <ul class="info-list">
+                <li><strong>Objectif</strong> : Estimation rapide et partielle</li>
+                <li><strong>Durée</strong> : Quelques minutes</li>
+                <li><strong>Expertise requise</strong> : Aucune</li>
+                <li><strong>Critères</strong> : 15 critères essentiels</li>
+                <li><strong>Thématiques</strong> : 3 thématiques principales</li>
+                <li><strong>Usage</strong> : Point de départ, vérification rapide</li>
+              </ul>
+            </div>
+            
+            <div class="info-comparison-item">
+              <h3 class="info-comparison-title">Audit RGAA complet</h3>
+              <ul class="info-list">
+                <li><strong>Objectif</strong> : Conformité complète et exhaustive</li>
+                <li><strong>Durée</strong> : Plusieurs jours/semaines</li>
+                <li><strong>Expertise requise</strong> : Expertise en accessibilité</li>
+                <li><strong>Critères</strong> : 106 critères (RGAA 4.1)</li>
+                <li><strong>Thématiques</strong> : 13 thématiques complètes</li>
+                <li><strong>Usage</strong> : Conformité légale, déclaration d'accessibilité</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="info-highlight">
+            <p class="info-text">
+              <strong>Important</strong> : Le diagnostic flash est une recommandation. Il est recommandé de réaliser un diagnostic flash avant de procéder à un audit RGAA complet.
+            </p>
+            <p class="info-text">
+              Le diagnostic flash couvre les critères les plus fondamentaux et les plus fréquemment problématiques. Une fois ces critères respectés, vous pouvez procéder à un audit complet pour vérifier la conformité à l'ensemble du référentiel RGAA.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Extensions recommandées</h2>
+          <p class="info-text">
+            Pour réaliser un diagnostic flash complet, il est recommandé d'utiliser également ces extensions de navigateur :
+          </p>
+          <ul class="info-list">
+            <li>
+              <strong>HeadingsMap</strong> (pictogramme [h/]) : Pour vérifier la hiérarchie des titres
+              <br>
+              <span class="info-link">Disponible pour Chrome, Firefox et Edge</span>
+            </li>
+            <li>
+              <strong>Contrast Checker</strong> (roue multicolore) : Pour vérifier les contrastes de couleurs
+              <br>
+              <span class="info-link">Disponible pour Chrome, Firefox et Edge</span>
+            </li>
+          </ul>
+          <div class="info-highlight" style="margin-top: 15px;">
+            <p class="info-text">
+              <strong>Note</strong> : Cette extension intègre certaines fonctionnalités (en beta) de ces plugins recommandés. Cependant, les extensions HeadingsMap et Contrast Checker restent la recommandation officielle des concepteurs du Diagnostic flash et sont à privilégier pour un diagnostic complet.
+            </p>
+          </div>
+        </section>
+        
+        <section class="info-section">
+          <h2 class="info-title">Référence</h2>
+          <p class="info-text">
+            Cette extension est basée sur le référentiel du diagnostic flash disponible sur :
+            <br>
+            <a href="https://design.numerique.gouv.fr/outils/diagnostic-flash/" target="_blank" rel="noopener noreferrer" class="info-external-link">
+              design.numerique.gouv.fr/outils/diagnostic-flash/
+            </a>
+          </p>
+        </section>
+      </div>
     </div>
   </div>
   
@@ -2027,6 +381,7 @@
   <!-- Tests Langage & interface -->
   <script src="tests/langage/contrasts.js"></script>
   <script src="tests/langage/color-only.js"></script>
+  <script src="tests/langage/media-alternatives-visualization.js"></script>
   <script src="tests/langage/media-alternatives.js"></script>
   <script src="tests/langage/language-defined.js"></script>
   <script src="tests/langage/explicit-links.js"></script>
@@ -2038,6 +393,7 @@
   <script src="tests/structuration/headings-hierarchy/analyze.js"></script>
   <script src="tests/structuration/headings-hierarchy/display.js"></script>
   <script src="tests/structuration/headings-hierarchy.js"></script>
+  <script src="tests/structuration/form-fields-visualization.js"></script>
   <script src="tests/structuration/form-fields.js"></script>
   <script src="tests/structuration/download-info.js"></script>
   

@@ -240,6 +240,22 @@ function initIcons() {
     structurationIcon.appendChild(createStructurationIcon(20, defaultIconColor));
   }
   
+  // Icônes des thématiques dans l'onglet Informations
+  const navIconInfo = document.getElementById('category-icon-info-navigation');
+  if (navIconInfo) {
+    navIconInfo.appendChild(createNavigationIcon(20, defaultIconColor));
+  }
+  
+  const langageIconInfo = document.getElementById('category-icon-info-langage');
+  if (langageIconInfo) {
+    langageIconInfo.appendChild(createLangageIcon(20, defaultIconColor));
+  }
+  
+  const structurationIconInfo = document.getElementById('category-icon-info-structuration');
+  if (structurationIconInfo) {
+    structurationIconInfo.appendChild(createStructurationIcon(20, defaultIconColor));
+  }
+  
   // Icônes des statistiques - Onglet Audit
   const totalIcon = document.getElementById('stat-icon-total');
   if (totalIcon) {
@@ -259,6 +275,11 @@ function initIcons() {
   const notApplicableIcon = document.getElementById('stat-icon-not-applicable');
   if (notApplicableIcon) {
     notApplicableIcon.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
+  }
+  
+  const derogationIcon = document.getElementById('stat-icon-derogation');
+  if (derogationIcon) {
+    derogationIcon.appendChild(createWarningIcon(20, '#ff9800'));
   }
   
   const scoreIcon = document.getElementById('stat-icon-score');
@@ -285,6 +306,11 @@ function initIcons() {
   const notApplicableIconScores = document.getElementById('stat-icon-not-applicable-scores');
   if (notApplicableIconScores) {
     notApplicableIconScores.appendChild(createNotApplicableIcon(20, '#9e9e9e'));
+  }
+  
+  const derogationIconScores = document.getElementById('stat-icon-derogation-scores');
+  if (derogationIconScores) {
+    derogationIconScores.appendChild(createWarningIcon(20, '#ff9800'));
   }
   
   const scoreIconScores = document.getElementById('stat-icon-score-scores');

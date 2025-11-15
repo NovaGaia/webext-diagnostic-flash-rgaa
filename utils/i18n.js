@@ -16,6 +16,7 @@ const translations = {
     statsPassed: 'Réussis',
     statsFailed: 'Échoués',
     statsNotApplicable: 'Non applicables',
+    statsDerogation: 'Dérogations',
     statsScore: 'Score',
     statsDistribution: 'Répartition des résultats',
     statsReset: 'Réinitialiser tous les tests',
@@ -176,6 +177,7 @@ const translations = {
     validationFailed: '✗ Échoué',
     validationNotTested: 'Non testé',
     validationNotApplicable: 'Non applicable',
+    validationDerogation: 'Dérogation',
     
     // Statuts
     statusPending: 'En attente de validation',
@@ -228,6 +230,7 @@ const translations = {
     statsPassed: 'Passed',
     statsFailed: 'Failed',
     statsNotApplicable: 'Not applicable',
+    statsDerogation: 'Derogations',
     statsScore: 'Score',
     statsDistribution: 'Results distribution',
     statsReset: 'Reset all tests',
